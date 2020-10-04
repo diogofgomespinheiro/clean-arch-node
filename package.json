@@ -1,0 +1,23 @@
+{
+  "name": "clean-architecture-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diogofgomespinheiro/clean-arch-node.git"
+  },
+  "keywords": [
+    "Typescript",
+    "Node",
+    "Clean Architecture"
+  ],
+  "author": "Diogo Pinheiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diogofgomespinheiro/clean-arch-node/issues"
+  },
+  "homepage": "https://github.com/diogofgomespinheiro/clean-arch-node#readme"
+}
