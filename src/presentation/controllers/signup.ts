@@ -1,6 +1,5 @@
 import { HttpResponse, HttpRequest } from '@/presentation/protocols/http';
-import { Controller } from '@/presentation/protocols/controller';
-import { EmailValidator } from '@/presentation/protocols/email-validator';
+import { Controller, EmailValidator } from '@/presentation/protocols';
 import { MissingParamError, InvalidParamError } from '@/presentation/errors';
 import { badRequest, serverError } from '@/presentation/helpers/http-helper';
 
