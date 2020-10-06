@@ -4,9 +4,12 @@ import {
   MissingParamError,
   ServerError
 } from '@/presentation/errors';
-import { EmailValidator } from '@/presentation/protocols';
-import { AccountModel } from '@/domain/models/account';
-import { AddAccount, AddAccountModel } from '@/domain/useCases/add-account';
+import {
+  AccountModel,
+  AddAccount,
+  AddAccountModel,
+  EmailValidator
+} from './signup-protocols';
 
 interface SutTypes {
   sut: SignUpController;
