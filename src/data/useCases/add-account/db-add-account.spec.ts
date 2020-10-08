@@ -9,7 +9,7 @@ import {
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
     async encrypt(value: string): Promise<string> {
-      return new Promise(resolve => resolve('hashed_password'));
+      return 'hashed_password';
     }
   }
 
@@ -25,7 +25,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
         email: 'valid_email@mail.com',
         password: 'hashed_password'
       };
-      return new Promise(resolve => resolve(fakeAccount));
+      return fakeAccount;
     }
   }
 

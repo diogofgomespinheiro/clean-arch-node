@@ -37,7 +37,7 @@ const makeAddAccount = (): AddAccount => {
         password: 'valid_password'
       };
 
-      return new Promise(resolve => resolve(fakeAccount));
+      return fakeAccount;
     }
   }
   return new AddAccountStub();
