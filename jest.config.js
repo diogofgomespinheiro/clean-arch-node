@@ -12,8 +12,9 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>'
   }),
+  preset: '@shelf/jest-mongodb',
+  testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'
-  },
-  testEnvironment: 'node'
+  }
 };
