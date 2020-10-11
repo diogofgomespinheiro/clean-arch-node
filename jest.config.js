@@ -3,8 +3,9 @@ const { compilerOptions } = require('./tsconfig.json');
 
 module.exports = {
   collectCoverageFrom: [
-    '<rootDir>/**/*.ts',
-    '!<rootDir>/**/*-protocols.ts',
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/main/**',
+    '!<rootDir>/src/**/*-protocols.ts',
     '!**/protocols/**'
   ],
   coverageDirectory: 'coverage',
