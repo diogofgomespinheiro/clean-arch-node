@@ -18,6 +18,10 @@ export const MongoHelper = {
     return this.client.db().collection(name);
   },
 
+  getAllCollections(): Promise<Array<Collection>> {
+    return this.client.db().collections();
+  },
+
   map(collection: any): any {
     const { _id, ...collectionWithoutId } = collection;
 

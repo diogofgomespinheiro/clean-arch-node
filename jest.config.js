@@ -13,6 +13,7 @@ module.exports = {
     prefix: '<rootDir>'
   }),
   preset: '@shelf/jest-mongodb',
+  setupFilesAfterEnv: ['./src/test/setup.ts'],
   testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'

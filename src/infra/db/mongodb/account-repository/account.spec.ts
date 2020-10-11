@@ -1,28 +1,6 @@
-import { MongoHelper } from '../helpers/mongo-helper';
 import { AccountMongoRepository } from './account';
 
 describe('Account Mongo Repository', () => {
-  beforeAll(async () => {
-    try {
-      await MongoHelper.connect(process.env.MONGO_URL);
-    } catch (e) {
-      console.error(e);
-    }
-  });
-
-  afterAll(async () => {
-    try {
-      await MongoHelper.disconnect();
-    } catch (e) {
-      console.error(e);
-    }
-  });
-
-  beforeEach(async () => {
-    const accountCollection = MongoHelper.getCollection('acccounts');
-    accountCollection.deleteMany({});
-  });
-
   const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository();
   };
