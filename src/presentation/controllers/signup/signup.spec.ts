@@ -68,7 +68,9 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('name'));
+    expect(httpResponse.body).toEqual(
+      new MissingParamError('name').serializeErrors()
+    );
   });
 
   it('Should return 400 if the email it`s not provided', async () => {
@@ -83,7 +85,9 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('email'));
+    expect(httpResponse.body).toEqual(
+      new MissingParamError('email').serializeErrors()
+    );
   });
 
   it('Should return 400 if the password it`s not provided', async () => {
@@ -98,7 +102,9 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('password'));
+    expect(httpResponse.body).toEqual(
+      new MissingParamError('password').serializeErrors()
+    );
   });
 
   it('Should return 400 if the passwordConfirmation it`s not provided', async () => {
@@ -114,7 +120,7 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(
-      new MissingParamError('passwordConfirmation')
+      new MissingParamError('passwordConfirmation').serializeErrors()
     );
   });
 
@@ -134,7 +140,9 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new InvalidParamError('email'));
+    expect(httpResponse.body).toEqual(
+      new InvalidParamError('email').serializeErrors()
+    );
   });
 
   it('Should call EmailValidator with correct email', async () => {
@@ -173,7 +181,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError());
+    expect(httpResponse.body).toEqual(new ServerError().serializeErrors());
   });
 
   it('Should return 400 if password confirmation fails', async () => {
@@ -191,7 +199,7 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(
-      new InvalidParamError('passwordConfirmation')
+      new InvalidParamError('passwordConfirmation').serializeErrors()
     );
   });
 
@@ -235,7 +243,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError());
+    expect(httpResponse.body).toEqual(new ServerError().serializeErrors());
   });
 
   it('Should return 200 if valid data is provided', async () => {
