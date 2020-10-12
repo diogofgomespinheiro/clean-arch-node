@@ -1,14 +1,15 @@
 import { CustomError } from '@/presentation/protocols/custom-error';
 
 export class ServerError extends CustomError {
-  constructor() {
+  constructor(stack: string) {
     super('Internal server error');
     this.name = 'ServerError';
+    this.stack = stack;
 
     Object.setPrototypeOf(this, ServerError.prototype);
   }
 
   serializeErrors() {
-    return [{ message: this.message, name: this.name }];
+    return [{ message: this.message, name: this.name, stack: this.stack }];
   }
 }

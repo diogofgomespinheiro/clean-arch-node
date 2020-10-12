@@ -1,9 +1,5 @@
 import { SignUpController } from './signup';
-import {
-  InvalidParamError,
-  MissingParamError,
-  ServerError
-} from '@/presentation/errors';
+import { InvalidParamError, MissingParamError } from '@/presentation/errors';
 import {
   AccountModel,
   AddAccount,
@@ -181,7 +177,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError().serializeErrors());
+    expect(httpResponse.body[0].name).toBe('ServerError');
   });
 
   it('Should return 400 if password confirmation fails', async () => {
@@ -243,7 +239,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError().serializeErrors());
+    expect(httpResponse.body[0].name).toBe('ServerError');
   });
 
   it('Should return 200 if valid data is provided', async () => {

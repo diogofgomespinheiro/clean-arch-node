@@ -2,6 +2,7 @@ export interface SerializedError {
   field?: string;
   message: string;
   name: string;
+  stack?: string;
 }
 
 export abstract class CustomError extends Error {

@@ -7,9 +7,9 @@ export const badRequest = (error: CustomError): HttpResponse => ({
   body: error.serializeErrors()
 });
 
-export const serverError = (): HttpResponse => ({
+export const serverError = (error: Error): HttpResponse => ({
   statusCode: 500,
-  body: new ServerError().serializeErrors()
+  body: new ServerError(error.stack).serializeErrors()
 });
 
 export const ok = (data: any): HttpResponse => ({
