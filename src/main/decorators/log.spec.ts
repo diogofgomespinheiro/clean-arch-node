@@ -1,12 +1,15 @@
+import { serverError } from '@/presentation/helpers/http-helper';
 import {
   Controller,
   HttpRequest,
   HttpResponse
 } from '@/presentation/protocols';
+import { LogErrorRepository } from '@/data/protocols/log-error-repository';
 import { LogControllerDecorator } from './log';
 
 interface SutTypes {
   controllerStub: Controller;
+  logErrorRepositoryStub: LogErrorRepository;
   sut: LogControllerDecorator;
 }
 
@@ -26,12 +29,27 @@ const makeController = (): Controller => {
   return new ControllerStub();
 };
 
+const makeLogErrorRepository = (): LogErrorRepository => {
+  class LogErrorRepositoryStub implements LogErrorRepository {
+    async log(stack: string): Promise<void> {
+      return null;
+    }
+  }
+
+  return new LogErrorRepositoryStub();
+};
+
 const makeSut = (): SutTypes => {
   const controllerStub = makeController();
-  const sut = new LogControllerDecorator(controllerStub);
+  const logErrorRepositoryStub = makeLogErrorRepository();
+  const sut = new LogControllerDecorator(
+    controllerStub,
+    logErrorRepositoryStub
+  );
 
   return {
     controllerStub,
+    logErrorRepositoryStub,
     sut
   };
 };
@@ -73,5 +91,30 @@ describe('LogController Decorator', () => {
         name: 'Diogo'
       }
     });
+  });
+
+  it('Should call LogErrorRepository with correct error if controller returns a server error', async () => {
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut();
+    const fakeError = new Error();
+    fakeError.stack = 'any_stack';
+
+    const error = serverError(fakeError);
+
+    const logSpy = jest.spyOn(logErrorRepositoryStub, 'log');
+    jest.spyOn(controllerStub, 'handle').mockImplementationOnce(async () => {
+      return error;
+    });
+
+    const httpRequest = {
+      body: {
+        name: 'any_mail@mail.com',
+        email: 'any_name',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    };
+
+    await sut.handle(httpRequest);
+    expect(logSpy).toHaveBeenCalledWith('any_stack');
   });
 });
