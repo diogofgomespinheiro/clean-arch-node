@@ -21,6 +21,7 @@
       "anonymous": "always",
       "named": "never",
       "asyncArrow": "always"
-    }]
+    }],
+    "no-useless-constructor": "off"
   }
 }
