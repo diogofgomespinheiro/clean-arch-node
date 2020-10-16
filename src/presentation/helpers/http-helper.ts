@@ -1,10 +1,21 @@
-import { ServerError } from '@/presentation/errors';
+import {
+  InvalidParamError,
+  MissingParamError,
+  ServerError,
+  UnauthorizedError
+} from '@/presentation/errors';
 import { HttpResponse } from '@/presentation/protocols/http';
-import { CustomError } from '@/presentation/protocols/custom-error';
 
-export const badRequest = (error: CustomError): HttpResponse => ({
+export const badRequest = (
+  error: MissingParamError | InvalidParamError
+): HttpResponse => ({
   statusCode: 400,
   body: error.serializeErrors()
+});
+
+export const unauthorized = (): HttpResponse => ({
+  statusCode: 401,
+  body: new UnauthorizedError().serializeErrors()
 });
 
 export const serverError = (error: Error): HttpResponse => ({
