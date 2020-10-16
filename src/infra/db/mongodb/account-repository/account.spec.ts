@@ -5,7 +5,7 @@ describe('Account Mongo Repository', () => {
     return new AccountMongoRepository();
   };
 
-  it('Should return an account on success', async () => {
+  it('should return an account on success', async () => {
     const sut = makeSut();
 
     const accountData = {

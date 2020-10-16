@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import app from '@/main/config/app';
 
 describe('Cors Middleware', () => {
-  it('Should enable cors', async () => {
+  it('should enable cors', async () => {
     app.get('/test_cors', (req: Request, res: Response) => {
       res.send();
     });

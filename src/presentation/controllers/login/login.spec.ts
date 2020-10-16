@@ -50,7 +50,7 @@ const makeSut = (): SutType => {
 };
 
 describe('Login Controller', () => {
-  it('Should return 400 if email is not provided', async () => {
+  it('should return 400 if email is not provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -62,7 +62,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('email')));
   });
 
-  it('Should return 400 if password is not provided', async () => {
+  it('should return 400 if password is not provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -74,7 +74,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('password')));
   });
 
-  it('Should return 400 if an invalid email is provided', async () => {
+  it('should return 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut();
 
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
@@ -83,7 +83,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
   });
 
-  it('Should call EmailValidator with correct email', async () => {
+  it('should call EmailValidator with correct email', async () => {
     const { sut, emailValidatorStub } = makeSut();
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid');
 
@@ -93,7 +93,7 @@ describe('Login Controller', () => {
     expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email);
   });
 
-  it('Should return 500 if EmailValidator throws an exception', async () => {
+  it('should return 500 if EmailValidator throws an exception', async () => {
     const { sut, emailValidatorStub } = makeSut();
 
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
@@ -108,7 +108,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 
-  it('Should call Authentication with correct values', async () => {
+  it('should call Authentication with correct values', async () => {
     const { sut, authenticationStub } = makeSut();
     const authSpy = jest.spyOn(authenticationStub, 'auth');
 

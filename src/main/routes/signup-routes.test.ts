@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '@/main/config/app';
 
 describe('SignUp Routes', () => {
-  it('Should return an account on success', async () => {
+  it('should return an account on success', async () => {
     await request(app)
       .post('/api/v1/signup')
       .send({

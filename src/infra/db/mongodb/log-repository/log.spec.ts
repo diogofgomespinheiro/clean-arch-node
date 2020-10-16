@@ -6,7 +6,7 @@ const makeSut = (): LogMongoRepository => {
 };
 
 describe('Log Mongo Repository', () => {
-  it('Should create an error log on success', async () => {
+  it('should create an error log on success', async () => {
     const sut = makeSut();
     const errorCollection = await MongoHelper.getCollection('errors');
 
