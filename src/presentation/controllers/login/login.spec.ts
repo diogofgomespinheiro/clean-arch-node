@@ -1,4 +1,8 @@
-import { badRequest, serverError } from '@/presentation/helpers/http-helper';
+import {
+  badRequest,
+  serverError,
+  unauthorized
+} from '@/presentation/helpers/http-helper';
 import { EmailValidator } from '@/presentation/protocols/email-validator';
 import { LoginController } from './login';
 import {
@@ -118,5 +122,16 @@ describe('Login Controller', () => {
 
     const { email, password } = httpRequest.body;
     expect(authSpy).toHaveBeenCalledWith(email, password);
+  });
+
+  it('should return 401 if invalid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
+      return null;
+    });
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(unauthorized());
   });
 });
