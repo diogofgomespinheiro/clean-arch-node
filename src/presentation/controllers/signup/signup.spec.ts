@@ -17,6 +17,7 @@ import {
   ok,
   serverError
 } from '@/presentation/helpers/http-helper';
+import { CustomError } from '@/presentation/protocols/custom-error';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -54,7 +55,7 @@ const makeAddAccount = (): AddAccount => {
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
-    validate(data: any): Error {
+    validate(data: any): CustomError {
       return null;
     }
   }
@@ -249,5 +250,19 @@ describe('SignUp Controller', () => {
 
     await sut.handle(httpRequest);
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  it('should return 400 if validation return an error', async () => {
+    const { sut, validationStub } = makeSut();
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new MissingParamError('any_field'));
+
+    const httpRequest = makeFakeRequest();
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('any_field'))
+    );
   });
 });
