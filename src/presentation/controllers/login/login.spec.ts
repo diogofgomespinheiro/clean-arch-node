@@ -3,7 +3,8 @@ import { LoginController } from './login';
 import {
   badRequest,
   serverError,
-  unauthorized
+  unauthorized,
+  ok
 } from '@/presentation/helpers/http-helper';
 import {
   InvalidParamError,
@@ -142,5 +143,12 @@ describe('Login Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  it('should return 200 if all credentials are provided', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }));
   });
 });
