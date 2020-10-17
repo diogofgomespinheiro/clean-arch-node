@@ -1,3 +1,5 @@
+import { CustomError } from '@/presentation/protocols/custom-error';
+
 export interface Validation {
-  validate(input: any): Error;
+  validate(input: any): CustomError;
 }
