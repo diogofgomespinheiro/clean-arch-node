@@ -3,7 +3,8 @@ import {
   Controller,
   EmailValidator,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
+  Validation
 } from './signup-protocols';
 import { MissingParamError, InvalidParamError } from '@/presentation/errors';
 import {
@@ -15,11 +16,14 @@ import {
 export class SignUpController implements Controller {
   constructor(
     private readonly emailValidator: EmailValidator,
-    private readonly addAccount: AddAccount
+    private readonly addAccount: AddAccount,
+    private readonly validation: Validation
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      this.validation.validate(httpRequest.body);
+
       const requiredFields = [
         'name',
         'email',
