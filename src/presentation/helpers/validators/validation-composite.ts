@@ -1,5 +1,5 @@
 import { CustomError } from '@/presentation/protocols/custom-error';
-import { Validation } from './validation';
+import { Validation } from '../../protocols/validation';
 
 export class ValidationComposite implements Validation {
   constructor(private readonly validations: Validation[]) {}

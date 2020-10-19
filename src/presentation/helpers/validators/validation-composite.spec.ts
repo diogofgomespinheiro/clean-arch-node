@@ -1,6 +1,6 @@
 import { MissingParamError } from '@/presentation/errors';
 import { CustomError } from '@/presentation/protocols/custom-error';
-import { Validation } from './validation';
+import { Validation } from '../../protocols/validation';
 import { ValidationComposite } from './validation-composite';
 
 const makeValidation = (): Validation => {
