@@ -8,6 +8,7 @@ import {
 } from '@/presentation/helpers/http/http-helper';
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { CustomError } from '@/presentation/protocols/custom-error';
+import { AuthenticationModel } from '@/domain/useCases/authentication';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -34,7 +35,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(email: string, password: string): Promise<string> {
+    async auth(authentication: AuthenticationModel): Promise<string> {
       return 'any_token';
     }
   }
@@ -59,7 +60,7 @@ describe('Login Controller', () => {
     await sut.handle(httpRequest);
 
     const { email, password } = httpRequest.body;
-    expect(authSpy).toHaveBeenCalledWith(email, password);
+    expect(authSpy).toHaveBeenCalledWith({ email, password });
   });
 
   it('should return 401 if invalid credentials are provided', async () => {
