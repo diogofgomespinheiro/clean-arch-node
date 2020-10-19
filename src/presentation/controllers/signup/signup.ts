@@ -9,7 +9,7 @@ import {
   badRequest,
   serverError,
   ok
-} from '@/presentation/helpers/http-helper';
+} from '@/presentation/helpers/http/http-helper';
 
 export class SignUpController implements Controller {
   constructor(

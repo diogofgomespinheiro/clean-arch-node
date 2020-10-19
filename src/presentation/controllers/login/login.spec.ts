@@ -5,7 +5,7 @@ import {
   serverError,
   unauthorized,
   ok
-} from '@/presentation/helpers/http-helper';
+} from '@/presentation/helpers/http/http-helper';
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { CustomError } from '@/presentation/protocols/custom-error';
 

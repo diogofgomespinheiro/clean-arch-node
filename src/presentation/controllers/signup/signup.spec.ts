@@ -11,7 +11,7 @@ import {
   badRequest,
   ok,
   serverError
-} from '@/presentation/helpers/http-helper';
+} from '@/presentation/helpers/http/http-helper';
 import { CustomError } from '@/presentation/protocols/custom-error';
 
 const makeFakeRequest = (): HttpRequest => ({
