@@ -22,6 +22,7 @@
       "named": "never",
       "asyncArrow": "always"
     }],
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "indent": ["off", 2]
   }
 }
