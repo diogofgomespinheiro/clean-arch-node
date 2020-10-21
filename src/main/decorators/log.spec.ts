@@ -4,7 +4,7 @@ import {
   HttpRequest,
   HttpResponse
 } from '@/presentation/protocols';
-import { LogErrorRepository } from '@/data/protocols/log-error-repository';
+import { LogErrorRepository } from '@/data/protocols/db/log-error-repository';
 import { LogControllerDecorator } from './log';
 import { AccountModel } from '@/domain/models/account';
 
