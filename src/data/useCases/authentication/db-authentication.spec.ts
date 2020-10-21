@@ -147,4 +147,17 @@ describe('DbAuthentication Use Case', () => {
 
     expect(generateSpy).toHaveBeenCalledWith('any_id');
   });
+
+  it('should throw if TokenGenerator throws', async () => {
+    const { sut, tokenGeneratorStub } = makeSut();
+    jest
+      .spyOn(tokenGeneratorStub, 'generate')
+      .mockImplementationOnce(async () => {
+        throw new Error();
+      });
+
+    const promise = sut.auth(makeFakeAuthentication());
+
+    expect(promise).rejects.toThrow();
+  });
 });
