@@ -43,4 +43,12 @@ describe('Account Mongo Repository', () => {
     expect(account.email).toBe(accountData.email);
     expect(account.password).toBe(accountData.password);
   });
+
+  it('should return null if loadByEmail fails', async () => {
+    const sut = makeSut();
+
+    const account = await sut.loadByEmail('any_email@mail.com');
+
+    expect(account).toBeNull();
+  });
 });
