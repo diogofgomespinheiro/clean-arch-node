@@ -1,5 +1,6 @@
 import { AddAccountModel } from '@/domain/useCases/add-account';
 import { MongoHelper } from '../helpers/mongo-helper';
+import { Collection } from 'mongodb';
 import { AccountMongoRepository } from './account';
 
 const makeFakeAccountData = (): AddAccountModel => ({
@@ -7,6 +8,10 @@ const makeFakeAccountData = (): AddAccountModel => ({
   email: 'any_email@mail.com',
   password: 'any_password'
 });
+
+const makeAccountCollection = async (): Promise<Collection> => {
+  return await MongoHelper.getCollection('accounts');
+};
 
 describe('Account Mongo Repository', () => {
   const makeSut = (): AccountMongoRepository => {
@@ -32,7 +37,7 @@ describe('Account Mongo Repository', () => {
 
     const accountData = makeFakeAccountData();
 
-    const accountCollection = await MongoHelper.getCollection('accounts');
+    const accountCollection = await makeAccountCollection();
     await accountCollection.insertOne(accountData);
 
     const account = await sut.loadByEmail(accountData.email);
@@ -50,5 +55,23 @@ describe('Account Mongo Repository', () => {
     const account = await sut.loadByEmail('any_email@mail.com');
 
     expect(account).toBeNull();
+  });
+
+  it('should update the account accessToken on updateAccesToken success', async () => {
+    const sut = makeSut();
+
+    const accountData = makeFakeAccountData();
+    const accountCollection = await makeAccountCollection();
+
+    const res = await accountCollection.insertOne(accountData);
+    const fakeAccount = res.ops[0];
+    expect(fakeAccount.accessToken).toBeFalsy();
+
+    await sut.updateAccessToken(fakeAccount._id, 'any_token');
+
+    const account = await accountCollection.findOne({ _id: fakeAccount._id });
+
+    expect(account).toBeTruthy();
+    expect(account.accessToken).toBe('any_token');
   });
 });
