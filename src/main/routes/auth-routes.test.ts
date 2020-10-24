@@ -38,5 +38,15 @@ describe('Auth Routes', () => {
         })
         .expect(200);
     });
+
+    it('should return 200 on login', async () => {
+      await request(app)
+        .post('/api/v1/login')
+        .send({
+          email: 'diogo@gmail.com',
+          password: '123456'
+        })
+        .expect(401);
+    });
   });
 });
