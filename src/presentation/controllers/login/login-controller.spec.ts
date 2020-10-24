@@ -1,5 +1,5 @@
 import { Authentication, HttpRequest, Validation } from './login-protocols';
-import { LoginController } from './login';
+import { LoginController } from './login-controller';
 import {
   badRequest,
   serverError,
