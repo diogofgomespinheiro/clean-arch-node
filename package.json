@@ -8,8 +8,9 @@
   },
   "scripts": {
     "clean": "del ./dist/*",
-    "build": "npm run clean && babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "build": "npm run clean && babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored --source-maps",
     "start": "node dist/main/server.js",
+    "debug": "node --inspect=0.0.0.0:9222 --nolazy dist/main/server.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/main/server.ts",
     "down": "docker-compose down",
     "up": "npm run build && docker-compose up -d",

@@ -13,12 +13,14 @@ services:
     build: .
     restart: always
     image: clean-node-ts
-    command: npm start
+    command: npm run debug
     volumes:
       - ./dist:/usr/app/dist
+      - ./package.json:/usr/app/package.json
     environment:
       MONGO_URL: mongodb://mongo:27017/clean-node-ts
     ports: 
       - "5050:5050"
+      - "9222:9222"
     links:
       - mongo
