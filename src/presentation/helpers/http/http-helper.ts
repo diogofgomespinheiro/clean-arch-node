@@ -7,6 +7,11 @@ export const badRequest = (error: CustomError): HttpResponse => ({
   body: error.serializeErrors()
 });
 
+export const forbidden = (error: CustomError): HttpResponse => ({
+  statusCode: 403,
+  body: error.serializeErrors()
+});
+
 export const unauthorized = (): HttpResponse => ({
   statusCode: 401,
   body: new UnauthorizedError().serializeErrors()
