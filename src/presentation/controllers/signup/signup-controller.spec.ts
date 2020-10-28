@@ -11,10 +11,12 @@ import {
 import { HttpRequest } from '@/presentation/protocols';
 import {
   badRequest,
+  forbidden,
   ok,
   serverError
 } from '@/presentation/helpers/http/http-helper';
 import { CustomError } from '@/presentation/protocols/custom-error';
+import { EmailInUseError } from '@/presentation/errors/email-in-use-error';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -114,6 +116,14 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  it('should return 403 if AddAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut();
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(null);
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()));
   });
 
   it('should return 200 if valid data is provided', async () => {
