@@ -3,7 +3,8 @@ import {
   AddAccountModel,
   AddAccountRepository,
   AccountModel,
-  Hasher
+  Hasher,
+  LoadAccountByEmailRepository
 } from './db-add-account-protocols';
 
 const makeFakeAccount = (): AccountModel => ({
@@ -39,18 +40,40 @@ const makeAddAccountRepository = (): AddAccountRepository => {
   return new AddAccountRepositoryStub();
 };
 
+const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+  class LoadAccountByEmailRepositoryStub
+    implements LoadAccountByEmailRepository {
+    async loadByEmail(email: string): Promise<AccountModel> {
+      return makeFakeAccount();
+    }
+  }
+
+  return new LoadAccountByEmailRepositoryStub();
+};
+
 interface SutTypes {
   sut: DbAddAccount;
   hasherStub: Hasher;
   addAccountRepositoryStub: AddAccountRepository;
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
 }
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher();
   const addAccountRepositoryStub = makeAddAccountRepository();
-  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub);
+  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
+  const sut = new DbAddAccount(
+    hasherStub,
+    addAccountRepositoryStub,
+    loadAccountByEmailRepositoryStub
+  );
 
-  return { sut, hasherStub: hasherStub, addAccountRepositoryStub };
+  return {
+    sut,
+    hasherStub: hasherStub,
+    addAccountRepositoryStub,
+    loadAccountByEmailRepositoryStub
+  };
 };
 
 describe('DbAddAccount Usecase', () => {
@@ -105,5 +128,15 @@ describe('DbAddAccount Usecase', () => {
 
     const account = await sut.add(makeFakeAccountData());
     expect(account).toEqual(makeFakeAccount());
+  });
+
+  it('should call LoadAccountByEmailRepostiory with correct email', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail');
+
+    const fakeAccountData = makeFakeAccountData();
+    await sut.add(fakeAccountData);
+
+    expect(loadSpy).toHaveBeenCalledWith(fakeAccountData.email);
   });
 });
