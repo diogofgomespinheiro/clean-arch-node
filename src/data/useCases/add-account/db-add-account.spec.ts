@@ -151,4 +151,17 @@ describe('DbAddAccount Usecase', () => {
 
     expect(loadSpy).toHaveBeenCalledWith(fakeAccountData.email);
   });
+
+  it('should throw if LoadAccountByEmailRepostiory throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockImplementationOnce(async () => {
+        throw new Error();
+      });
+
+    const promise = sut.add(makeFakeAccountData());
+
+    expect(promise).rejects.toThrow();
+  });
 });
