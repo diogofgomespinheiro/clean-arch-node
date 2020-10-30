@@ -8,14 +8,13 @@ import {
   AuthenticationModel,
   Validation
 } from './signup-protocols';
-import { HttpRequest } from '@/presentation/protocols';
+import { HttpRequest, CustomError } from '@/presentation/protocols';
 import {
   badRequest,
   forbidden,
   ok,
   serverError
 } from '@/presentation/helpers/http/http-helper';
-import { CustomError } from '@/presentation/protocols/custom-error';
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error';
 
 const makeFakeRequest = (): HttpRequest => ({

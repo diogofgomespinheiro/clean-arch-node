@@ -1,4 +1,4 @@
-import { CustomError } from '@/presentation/protocols/custom-error';
+import { CustomError } from '@/presentation/protocols';
 
 export class MissingParamError extends CustomError {
   constructor(private readonly paramName: string) {

@@ -1,4 +1,4 @@
-import { CustomError } from '@/presentation/protocols/custom-error';
+import { CustomError } from '@/presentation/protocols';
 
 export class EmailInUseError extends CustomError {
   private readonly paramName = 'email';
