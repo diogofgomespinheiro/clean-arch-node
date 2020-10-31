@@ -1,7 +1,13 @@
 import { MissingParamError } from '@/presentation/errors';
 import { badRequest } from '@/presentation/helpers/http/http-helper';
 import { AddSurveyController } from './add-survey-controller';
-import { HttpRequest, CustomError, Validation } from './add-survey-protocols';
+import {
+  HttpRequest,
+  CustomError,
+  Validation,
+  AddSurvey,
+  AddSurveyModel
+} from './add-survey-protocols';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -18,6 +24,7 @@ const makeFakeRequest = (): HttpRequest => ({
 interface SutType {
   sut: AddSurveyController;
   validationStub: Validation;
+  addSurveyStub: AddSurvey;
 }
 
 const makeValidation = (): Validation => {
@@ -30,10 +37,21 @@ const makeValidation = (): Validation => {
   return new ValidationStub();
 };
 
+const makeAddSurvey = (): AddSurvey => {
+  class AddSurveyStub implements AddSurvey {
+    add(data: AddSurveyModel): Promise<void> {
+      return null;
+    }
+  }
+
+  return new AddSurveyStub();
+};
+
 const makeSut = (): SutType => {
   const validationStub = makeValidation();
-  const sut = new AddSurveyController(validationStub);
-  return { sut, validationStub };
+  const addSurveyStub = makeAddSurvey();
+  const sut = new AddSurveyController(validationStub, addSurveyStub);
+  return { sut, validationStub, addSurveyStub };
 };
 
 describe('AddSurvey Controller', () => {
@@ -60,5 +78,16 @@ describe('AddSurvey Controller', () => {
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError('any_field'))
     );
+  });
+
+  it('should call AddSurvey with correct values', async () => {
+    const { sut, addSurveyStub } = makeSut();
+
+    const addSpy = jest.spyOn(addSurveyStub, 'add');
+
+    const httpRequest = makeFakeRequest();
+    await sut.handle(httpRequest);
+
+    expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 });
