@@ -1,5 +1,8 @@
-import { MissingParamError } from '@/presentation/errors';
-import { badRequest } from '@/presentation/helpers/http/http-helper';
+import { MissingParamError, ServerError } from '@/presentation/errors';
+import {
+  badRequest,
+  serverError
+} from '@/presentation/helpers/http/http-helper';
 import { AddSurveyController } from './add-survey-controller';
 import {
   HttpRequest,
@@ -72,9 +75,7 @@ describe('AddSurvey Controller', () => {
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingParamError('any_field'));
 
-    const httpRequest = makeFakeRequest();
-
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError('any_field'))
     );
@@ -89,5 +90,18 @@ describe('AddSurvey Controller', () => {
     await sut.handle(httpRequest);
 
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  it('should return 500 if AddSurvey throws an exception', async () => {
+    const { sut, addSurveyStub } = makeSut();
+
+    jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(() => {
+      const error = new Error();
+      error.stack = null;
+      throw error;
+    });
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 });
