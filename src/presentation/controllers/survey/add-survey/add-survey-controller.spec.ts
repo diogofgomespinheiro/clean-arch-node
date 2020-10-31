@@ -1,7 +1,8 @@
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import {
   badRequest,
-  serverError
+  serverError,
+  noContent
 } from '@/presentation/helpers/http/http-helper';
 import { AddSurveyController } from './add-survey-controller';
 import {
@@ -103,5 +104,12 @@ describe('AddSurvey Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  it('should return 204 on sucess', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(noContent());
   });
 });
