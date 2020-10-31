@@ -1,3 +1,5 @@
+import { MissingParamError } from '@/presentation/errors';
+import { badRequest } from '@/presentation/helpers/http/http-helper';
 import { AddSurveyController } from './add-survey-controller';
 import { HttpRequest, CustomError, Validation } from './add-survey-protocols';
 
@@ -44,5 +46,19 @@ describe('AddSurvey Controller', () => {
     await sut.handle(httpRequest);
 
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  it('should return 400 if validation returns an error', async () => {
+    const { sut, validationStub } = makeSut();
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new MissingParamError('any_field'));
+
+    const httpRequest = makeFakeRequest();
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('any_field'))
+    );
   });
 });
