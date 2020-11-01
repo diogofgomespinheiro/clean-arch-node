@@ -1,5 +1,5 @@
 import { AccessDeniedError } from '@/presentation/errors';
-import { forbidden } from '@/presentation/helpers/http/http-helper';
+import { forbidden, ok } from '@/presentation/helpers/http/http-helper';
 import { HttpRequest } from '@/presentation/protocols';
 import { AuthMiddleware } from './auth-middleware';
 import { LoadAccountByToken } from '@/domain/useCases/load-account-by-token';
@@ -66,8 +66,16 @@ describe('Auth Middleware', () => {
       .spyOn(loadAccountByTokenStub, 'load')
       .mockImplementationOnce(async () => null);
 
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
+  });
+
+  it('should return 200 if LoadAccountByToken returns an account', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(ok({ accountId: makeFakeAccount().id }));
   });
 });
