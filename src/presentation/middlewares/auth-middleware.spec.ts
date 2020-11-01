@@ -4,10 +4,12 @@ import {
   ok,
   serverError
 } from '@/presentation/helpers/http/http-helper';
-import { HttpRequest } from '@/presentation/protocols';
+import {
+  HttpRequest,
+  LoadAccountByToken,
+  AccountModel
+} from './auth-middleware-protocols';
 import { AuthMiddleware } from './auth-middleware';
-import { LoadAccountByToken } from '@/domain/useCases/load-account-by-token';
-import { AccountModel } from '@/domain/models/account';
 
 const makeFakeRequest = (): HttpRequest => {
   return {
