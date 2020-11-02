@@ -4,12 +4,12 @@ import {
   serverError,
   unauthorized
 } from '@/presentation/helpers/http/http-helper';
-import { Validation } from '../signup/signup-protocols';
 import {
   Authentication,
   Controller,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
+  Validation
 } from './login-protocols';
 
 export class LoginController implements Controller {
