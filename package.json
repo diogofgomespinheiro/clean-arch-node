@@ -21,7 +21,8 @@
     "test:integration": "npm run test -- --watchAll -c jest-integration.config.js",
     "test:verbose:integration": "npm run test:verbose -- --watchAll -c jest-integration.config.js",
     "test:staged": "npm run test -- --findRelatedTests",
-    "test:ci": "npm run test -- --coverage"
+    "test:ci": "npm run test -- --coverage",
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -60,6 +61,7 @@
     "@typescript-eslint/parser": "4.5.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "commitizen": "4.2.2",
+    "coveralls": "^3.1.0",
     "cz-conventional-changelog": "3.3.0",
     "del-cli": "^3.0.1",
     "eslint": "7.12.0",
