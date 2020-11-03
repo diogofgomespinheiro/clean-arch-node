@@ -6,12 +6,12 @@
 2. ✅ Validates all the mandatory fields **name**, **email**, **password** and **passwordConfirmation**
 3. ✅ Validates if the **password** and **passwordConfirmation** are the same
 4. ✅ Validates if the **email** is valid
-5. ❌ **Validates** if the email already exists
+5. ✅ **Validates** if the email already exists
 6. ✅ Create an **encrypted** password
 7. ✅ **Creates** an user account with all the data provided, **replacing** the password for the encrypted one
-8. ❌ Generates an **accessToken** with the user's id
-9. ❌ **Updates** the user data with the generated token
-10. ❌ Returns **200** with the accessToken and the user's name
+8. ✅ Generates an **accessToken** with the user's id
+9. ✅ **Updates** the user data with the generated token
+10. ✅ Returns **200** with the accessToken and the user's name
 
 > ## Exceptions
 
