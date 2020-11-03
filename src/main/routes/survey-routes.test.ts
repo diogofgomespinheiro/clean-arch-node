@@ -4,7 +4,7 @@ import app from '@/main/config/app';
 
 describe('Survey Routes', () => {
   describe('POST /surveys', () => {
-    it('should return 204 on add survey success', async () => {
+    it('should return 403 if no accessToken is provided', async () => {
       await request(app)
         .post('/api/v1/surveys')
         .send({
@@ -19,7 +19,7 @@ describe('Survey Routes', () => {
             }
           ]
         })
-        .expect(204);
+        .expect(403);
     });
   });
 });
