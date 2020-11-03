@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/diogofgomespinheiro/clean-arch-node.svg?branch=master)](https://travis-ci.com/diogofgomespinheiro/clean-arch-node)
+[![Coverage Status](https://coveralls.io/repos/github/diogofgomespinheiro/clean-arch-node/badge.svg?branch=master)](https://coveralls.io/github/diogofgomespinheiro/clean-arch-node?branch=master)
+
 # clean-arch-node
 
 ## Introduction
