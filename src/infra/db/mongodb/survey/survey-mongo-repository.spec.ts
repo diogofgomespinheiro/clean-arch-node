@@ -13,7 +13,8 @@ const makeFakeSurveyData = (): AddSurveyModel => ({
     {
       answer: 'other_answer'
     }
-  ]
+  ],
+  date: new Date()
 });
 
 const makeSurveyCollection = async (): Promise<Collection> => {
