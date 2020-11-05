@@ -3,8 +3,8 @@ import { Collection } from 'mongodb';
 import { MongoHelper } from '../helpers/mongo-helper';
 import { SurveyMongoRepository } from './survey-mongo-repository';
 
-const makeFakeSurveyData = (): AddSurveyModel => ({
-  question: 'any_question',
+const makeFakeSurveyData = (question = 'any_question'): AddSurveyModel => ({
+  question,
   answers: [
     {
       image: 'any_image',
@@ -26,18 +26,38 @@ const makeSut = (): SurveyMongoRepository => {
 };
 
 describe('Survey Mongo Repository', () => {
-  it('should add a survey on success', async () => {
-    const sut = makeSut();
-    const surveyData = makeFakeSurveyData();
+  describe('add()', () => {
+    it('should add a survey on success', async () => {
+      const sut = makeSut();
+      const surveyData = makeFakeSurveyData();
 
-    await sut.add(surveyData);
+      await sut.add(surveyData);
 
-    const surveyCollection = await makeSurveyCollection();
-    const survey = await surveyCollection.findOne({
-      question: surveyData.question
+      const surveyCollection = await makeSurveyCollection();
+      const survey = await surveyCollection.findOne({
+        question: surveyData.question
+      });
+
+      expect(survey).toBeTruthy();
+      expect(survey).toEqual(surveyData);
     });
+  });
 
-    expect(survey).toBeTruthy();
-    expect(survey).toEqual(surveyData);
+  describe('loadAll()', () => {
+    it('should load all surveys on success', async () => {
+      const surveyCollection = await makeSurveyCollection();
+      const surveysToInsert = [
+        makeFakeSurveyData(),
+        makeFakeSurveyData('other_question')
+      ];
+      await surveyCollection.insertMany(surveysToInsert);
+
+      const sut = makeSut();
+      const surveys = await sut.loadAll();
+      console.log(surveys);
+      expect(surveys.length).toBe(2);
+      expect(surveys[0].question).toBe(surveysToInsert[0].question);
+      expect(surveys[1].question).toBe(surveysToInsert[1].question);
+    });
   });
 });
