@@ -33,9 +33,9 @@ export const MongoHelper = {
     return this.client.db().collections();
   },
 
-  map(collection: any): any {
-    const { _id, ...collectionWithoutId } = collection;
+  map: (data: any): any => {
+    const { _id, ...rest } = data;
 
-    return Object.assign({}, collectionWithoutId, { id: _id });
+    return Object.assign({}, rest, { id: _id });
   }
 };
