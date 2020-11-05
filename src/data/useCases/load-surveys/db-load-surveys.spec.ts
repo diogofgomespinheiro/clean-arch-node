@@ -3,6 +3,7 @@ import {
   LoadSurveysRepository,
   SurveyModel
 } from './db-load-surveys-protocols';
+import MockDate from 'mockdate';
 
 const makeFakeSurveys = (): SurveyModel[] => {
   return [
@@ -53,6 +54,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbLoadSurveys', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   it('should call LoadSurveysRepository', async () => {
     const { sut, loadSurveysRepositoryStub } = makeSut();
     const loadAllSpy = jest.spyOn(loadSurveysRepositoryStub, 'loadAll');
@@ -64,5 +73,17 @@ describe('DbLoadSurveys', () => {
     const { sut } = makeSut();
     const surveys = await sut.load();
     expect(surveys).toEqual(makeFakeSurveys());
+  });
+
+  it('should throw if LoadSurveysRepository throws', async () => {
+    const { sut, loadSurveysRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadSurveysRepositoryStub, 'loadAll')
+      .mockImplementationOnce(async () => {
+        throw new Error();
+      });
+
+    const promise = sut.load();
+    await expect(promise).rejects.toThrow();
   });
 });
