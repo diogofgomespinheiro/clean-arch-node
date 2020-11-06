@@ -54,10 +54,17 @@ describe('Survey Mongo Repository', () => {
 
       const sut = makeSut();
       const surveys = await sut.loadAll();
-      console.log(surveys);
+
       expect(surveys.length).toBe(2);
       expect(surveys[0].question).toBe(surveysToInsert[0].question);
       expect(surveys[1].question).toBe(surveysToInsert[1].question);
+    });
+
+    it('should load an empty list', async () => {
+      const sut = makeSut();
+      const surveys = await sut.loadAll();
+
+      expect(surveys.length).toBe(0);
     });
   });
 });
