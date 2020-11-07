@@ -26,10 +26,10 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'hashed_password'
 });
 
-interface SutTypes {
+type SutTypes = {
   sut: AuthMiddleware;
   loadAccountByTokenStub: LoadAccountByToken;
-}
+};
 
 const makeLoadAccountByToken = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {

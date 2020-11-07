@@ -21,11 +21,11 @@ const makeFakeRequest = (): HttpRequest => ({
   }
 });
 
-interface SutType {
+type SutTypes = {
   sut: LoginController;
   validationStub: Validation;
   authenticationStub: Authentication;
-}
+};
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
@@ -47,7 +47,7 @@ const makeAuthentication = (): Authentication => {
   return new AuthenticationStub();
 };
 
-const makeSut = (): SutType => {
+const makeSut = (): SutTypes => {
   const validationStub = makeValidation();
   const authenticationStub = makeAuthentication();
   const sut = new LoginController(authenticationStub, validationStub);

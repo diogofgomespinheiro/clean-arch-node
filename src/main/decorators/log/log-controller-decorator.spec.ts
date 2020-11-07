@@ -32,11 +32,11 @@ const makeFakeServerError = (): HttpResponse => {
   return error;
 };
 
-interface SutTypes {
+type SutTypes = {
   controllerStub: Controller;
   logErrorRepositoryStub: LogErrorRepository;
   sut: LogControllerDecorator;
-}
+};
 
 const makeController = (): Controller => {
   class ControllerStub implements Controller {

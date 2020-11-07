@@ -1,9 +1,9 @@
-export interface SerializedError {
+export type SerializedError = {
   field?: string;
   message: string;
   name: string;
   stack?: string;
-}
+};
 
 export abstract class CustomError extends Error {
   constructor(message: string) {
