@@ -18,8 +18,9 @@
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm run test -- --watchAll -c jest-unit.config.js",
+    "test:unit:verbose": "npm run test:verbose -- --watchAll -c jest-unit.config.js",
     "test:integration": "npm run test -- --watchAll -c jest-integration.config.js",
-    "test:verbose:integration": "npm run test:verbose -- --watchAll -c jest-integration.config.js",
+    "test:integration:verbose": "npm run test:verbose -- --watchAll -c jest-integration.config.js",
     "test:staged": "npm run test -- --findRelatedTests",
     "test:ci": "npm run test -- --coverage",
     "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"

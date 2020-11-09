@@ -8,15 +8,17 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults'
     );
+
+    const { surveyId, accountId, answer, date } = data;
     const res = await surveyResultCollection.findOneAndUpdate(
       {
-        surveyId: data.surveyId,
-        accountId: data.accountId
+        surveyId,
+        accountId
       },
       {
         $set: {
-          answer: data.answer,
-          date: data.date
+          answer,
+          date
         }
       },
       {

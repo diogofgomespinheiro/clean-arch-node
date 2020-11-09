@@ -5,6 +5,7 @@ import { SurveyModel } from '@/domain/models/survey';
 import { AccountModel } from '@/domain/models/account';
 import { AddAccountModel } from '@/domain/useCases/add-account';
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
+import { SurveyResultModel } from '@/domain/models/survey-result';
 
 const makeFakeSurveyData = (question = 'any_question'): AddSurveyModel => ({
   question,
@@ -28,24 +29,33 @@ const makeFakeAccountData = (): AddAccountModel => ({
 
 const makeFakeSurveyResultData = (
   account: AccountModel,
-  survey: SurveyModel
+  survey: SurveyModel,
+  answerIndex = 0
 ): SaveSurveyResultModel => ({
   surveyId: survey.id,
   accountId: account.id,
-  answer: survey.answers[0].answer,
+  answer: survey.answers[answerIndex].answer,
   date: new Date()
 });
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const surveyCollection = await MongoHelper.getCollection('surveys');
   const res = await surveyCollection.insertOne(makeFakeSurveyData());
-  return res.ops[0];
+  return MongoHelper.map(res.ops[0]);
 };
 
 const makeAccount = async (): Promise<AccountModel> => {
   const accountCollection = await MongoHelper.getCollection('accounts');
   const res = await accountCollection.insertOne(makeFakeAccountData());
-  return res.ops[0];
+  return MongoHelper.map(res.ops[0]);
+};
+
+const makeSurveyResult = async (
+  data: SaveSurveyResultModel
+): Promise<SurveyResultModel> => {
+  const surveyCollection = await MongoHelper.getCollection('surveyResults');
+  const res = await surveyCollection.insertOne(data);
+  return MongoHelper.map(res.ops[0]);
 };
 
 const makeSut = (): SurveyResultMongoRepository => {
@@ -66,6 +76,24 @@ describe('Survey Result Mongo Repository', () => {
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.id).toBeTruthy();
       expect(surveyResult.answer).toBe(survey.answers[0].answer);
+    });
+
+    it('should update a survey result if it`s not new', async () => {
+      const survey = await makeSurvey();
+      const account = await makeAccount();
+
+      const surveyResultBeforeUpdate = await makeSurveyResult(
+        makeFakeSurveyResultData(account, survey)
+      );
+      const sut = makeSut();
+
+      const surveyResultAfterUpdate = await sut.save(
+        makeFakeSurveyResultData(account, survey, 1)
+      );
+
+      expect(surveyResultAfterUpdate).toBeTruthy();
+      expect(surveyResultAfterUpdate.id).toEqual(surveyResultBeforeUpdate.id);
+      expect(surveyResultAfterUpdate.answer).toBe(survey.answers[1].answer);
     });
   });
 });
