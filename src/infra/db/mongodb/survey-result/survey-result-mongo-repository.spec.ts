@@ -1,9 +1,9 @@
-import { AddSurveyModel } from '@/domain/useCases/add-survey';
+import { AddSurveyModel } from '@/domain/useCases/survey/add-survey';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
-import { SaveSurveyResultModel } from '@/domain/useCases/save-survey-result';
+import { SaveSurveyResultModel } from '@/domain/useCases/survey-result/save-survey-result';
 import { SurveyModel } from '@/domain/models/survey';
 import { AccountModel } from '@/domain/models/account';
-import { AddAccountModel } from '@/domain/useCases/add-account';
+import { AddAccountModel } from '@/domain/useCases/account/add-account';
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
 import { SurveyResultModel } from '@/domain/models/survey-result';
 
