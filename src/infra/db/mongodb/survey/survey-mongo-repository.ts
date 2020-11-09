@@ -18,12 +18,12 @@ export class SurveyMongoRepository
   async loadAll(): Promise<SurveyModel[]> {
     const accountCollection = await MongoHelper.getCollection('surveys');
     const surveys = await accountCollection.find().toArray();
-    return surveys;
+    return MongoHelper.mapCollection(surveys);
   }
 
   async loadById(id: string): Promise<SurveyModel> {
     const accountCollection = await MongoHelper.getCollection('surveys');
     const survey = await accountCollection.findOne({ _id: id });
-    return survey;
+    return survey && MongoHelper.map(survey);
   }
 }
