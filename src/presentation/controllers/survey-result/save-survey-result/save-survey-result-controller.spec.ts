@@ -10,9 +10,12 @@ import {
 } from '@/presentation/helpers/http/http-helper';
 import { InvalidParamError, ServerError } from '@/presentation/errors';
 
-const makeFakeRequest = (): HttpRequest => ({
+const makeFakeRequest = (answer = 'any_answer'): HttpRequest => ({
   params: {
     surveyId: 'any_id'
+  },
+  body: {
+    answer
   }
 });
 
@@ -70,7 +73,7 @@ describe('SaveSurveyResult Controller', () => {
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 
-  it('should return 500 if LoadSurveys throws an exception', async () => {
+  it('should return 500 if LoadSurveyById throws an exception', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
 
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockImplementationOnce(() => {
@@ -81,5 +84,12 @@ describe('SaveSurveyResult Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  it('should return 403 if an invalid answer is provided', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(makeFakeRequest('invalid_answer'));
+    expect(httpResponse).toEqual(forbidden(new InvalidParamError('answer')));
   });
 });
