@@ -1,4 +1,4 @@
-import { AddSurveyModel } from '@/domain/useCases/add-survey';
+import { AddSurveyModel } from '@/domain/useCases/survey/add-survey';
 import { Collection } from 'mongodb';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { SurveyMongoRepository } from './survey-mongo-repository';
@@ -56,6 +56,8 @@ describe('Survey Mongo Repository', () => {
       const surveys = await sut.loadAll();
 
       expect(surveys.length).toBe(2);
+      expect(surveys[0].id).toBeTruthy();
+      expect(surveys[1].id).toBeTruthy();
       expect(surveys[0].question).toBe(surveysToInsert[0].question);
       expect(surveys[1].question).toBe(surveysToInsert[1].question);
     });
@@ -65,6 +67,19 @@ describe('Survey Mongo Repository', () => {
       const surveys = await sut.loadAll();
 
       expect(surveys.length).toBe(0);
+    });
+  });
+
+  describe('loadById', () => {
+    it('should load survey by id on success', async () => {
+      const surveyCollection = await makeSurveyCollection();
+      const res = await surveyCollection.insertOne(makeFakeSurveyData());
+
+      const id = res.ops[0]._id;
+      const sut = makeSut();
+      const survey = await sut.loadById(id);
+      expect(survey).toBeTruthy();
+      expect(survey.id).toBeTruthy();
     });
   });
 });

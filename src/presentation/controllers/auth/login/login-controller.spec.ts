@@ -12,7 +12,7 @@ import {
   ok
 } from '@/presentation/helpers/http/http-helper';
 import { MissingParamError, ServerError } from '@/presentation/errors';
-import { AuthenticationModel } from '@/domain/useCases/authentication';
+import { AuthenticationModel } from '@/domain/useCases/account/authentication';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

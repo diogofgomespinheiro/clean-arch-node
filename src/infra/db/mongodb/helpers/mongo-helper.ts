@@ -37,5 +37,9 @@ export const MongoHelper = {
     const { _id, ...rest } = data;
 
     return Object.assign({}, rest, { id: _id });
+  },
+
+  mapCollection: (collection: any): any => {
+    return collection.map(collectionItem => MongoHelper.map(collectionItem));
   }
 };
