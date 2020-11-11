@@ -3,9 +3,9 @@ import { MissingParamError, ServerError } from '@/presentation/errors';
 import {
   AccountModel,
   AddAccount,
-  AddAccountModel,
+  AddAccountParams,
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
   Validation
 } from './signup-protocols';
 import { HttpRequest, CustomError } from '@/presentation/protocols';
@@ -34,7 +34,7 @@ type SutTypes = {
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add(accountData: AddAccountModel): Promise<AccountModel> {
+    async add(accountData: AddAccountParams): Promise<AccountModel> {
       return makeFakeAccount();
     }
   }
@@ -53,7 +53,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return 'any_token';
     }
   }

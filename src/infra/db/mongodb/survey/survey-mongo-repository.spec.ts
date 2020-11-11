@@ -1,9 +1,9 @@
-import { AddSurveyModel } from '@/domain/useCases/survey/add-survey';
+import { AddSurveyParams } from '@/domain/useCases/survey/add-survey';
 import { Collection } from 'mongodb';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { SurveyMongoRepository } from './survey-mongo-repository';
 
-const makeFakeSurveyData = (question = 'any_question'): AddSurveyModel => ({
+const makeFakeSurveyData = (question = 'any_question'): AddSurveyParams => ({
   question,
   answers: [
     {

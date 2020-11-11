@@ -12,7 +12,7 @@ import {
   ok
 } from '@/presentation/helpers/http/http-helper';
 import { MissingParamError, ServerError } from '@/presentation/errors';
-import { AuthenticationModel } from '@/domain/useCases/account/authentication';
+import { AuthenticationParams } from '@/domain/useCases/account/authentication';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -39,7 +39,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return 'any_token';
     }
   }

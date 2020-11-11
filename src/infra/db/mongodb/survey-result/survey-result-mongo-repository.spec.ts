@@ -1,13 +1,13 @@
-import { AddSurveyModel } from '@/domain/useCases/survey/add-survey';
+import { AddSurveyParams } from '@/domain/useCases/survey/add-survey';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
-import { SaveSurveyResultModel } from '@/domain/useCases/survey-result/save-survey-result';
+import { SaveSurveyResultParams } from '@/domain/useCases/survey-result/save-survey-result';
 import { SurveyModel } from '@/domain/models/survey';
 import { AccountModel } from '@/domain/models/account';
-import { AddAccountModel } from '@/domain/useCases/account/add-account';
+import { AddAccountParams } from '@/domain/useCases/account/add-account';
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
 import { SurveyResultModel } from '@/domain/models/survey-result';
 
-const makeFakeSurveyData = (question = 'any_question'): AddSurveyModel => ({
+const makeFakeSurveyData = (question = 'any_question'): AddSurveyParams => ({
   question,
   answers: [
     {
@@ -21,7 +21,7 @@ const makeFakeSurveyData = (question = 'any_question'): AddSurveyModel => ({
   date: new Date()
 });
 
-const makeFakeAccountData = (): AddAccountModel => ({
+const makeFakeAccountData = (): AddAccountParams => ({
   name: 'valid_name',
   email: 'valid_email@mail.com',
   password: 'valid_password'
@@ -31,7 +31,7 @@ const makeFakeSurveyResultData = (
   account: AccountModel,
   survey: SurveyModel,
   answerIndex = 0
-): SaveSurveyResultModel => ({
+): SaveSurveyResultParams => ({
   surveyId: survey.id,
   accountId: account.id,
   answer: survey.answers[answerIndex].answer,
@@ -51,7 +51,7 @@ const makeAccount = async (): Promise<AccountModel> => {
 };
 
 const makeSurveyResult = async (
-  data: SaveSurveyResultModel
+  data: SaveSurveyResultParams
 ): Promise<SurveyResultModel> => {
   const surveyCollection = await MongoHelper.getCollection('surveyResults');
   const res = await surveyCollection.insertOne(data);

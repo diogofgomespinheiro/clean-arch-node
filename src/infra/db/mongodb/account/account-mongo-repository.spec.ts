@@ -1,12 +1,12 @@
 import { AccountMongoRepository } from './account-mongo-repository';
-import { AddAccountModel } from '@/domain/useCases/account/add-account';
+import { AddAccountParams } from '@/domain/useCases/account/add-account';
 import { Collection } from 'mongodb';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 
 const makeFakeAccountData = (
   accessToken?: string,
   role?: string
-): AddAccountModel => ({
+): AddAccountParams => ({
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
