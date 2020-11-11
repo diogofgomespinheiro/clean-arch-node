@@ -142,4 +142,17 @@ describe('SaveSurveyResult Controller', () => {
       date: new Date()
     });
   });
+
+  it('should return 500 if SaveSurveyResult throws an exception', async () => {
+    const { sut, saveSurveyResultStub } = makeSut();
+
+    jest.spyOn(saveSurveyResultStub, 'save').mockImplementationOnce(() => {
+      const error = new Error();
+      error.stack = null;
+      throw error;
+    });
+
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
 });
