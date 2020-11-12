@@ -6,21 +6,12 @@ import {
   LoadAccountByTokenRepository
 } from './db-load-account-by-token-protocols';
 import { throwError } from '@/domain/test/test-helper';
+import { mockDecrypter } from '@/data/test';
 
 type SutTypes = {
   sut: DbLoadAccountByToken;
   decrypterStub: Decrypter;
   loadAccountByTokenRepositoryStub: LoadAccountByTokenRepository;
-};
-
-const makeDecrypter = (): Decrypter => {
-  class DecrypterStub implements Decrypter {
-    async decrypt(value: string): Promise<string> {
-      return 'any_value';
-    }
-  }
-
-  return new DecrypterStub();
 };
 
 const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
@@ -35,7 +26,7 @@ const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
 };
 
 const makeSut = (): SutTypes => {
-  const decrypterStub = makeDecrypter();
+  const decrypterStub = mockDecrypter();
   const loadAccountByTokenRepositoryStub = makeLoadAccountByTokenRepository();
 
   const sut = new DbLoadAccountByToken(

@@ -8,16 +8,7 @@ import {
   LoadAccountByEmailRepository
 } from './db-add-account-protocols';
 import { throwError } from '@/domain/test/test-helper';
-
-const makeHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash(value: string): Promise<string> {
-      return 'hashed_password';
-    }
-  }
-
-  return new HasherStub();
-};
+import { mockHasher } from '@/data/test';
 
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
@@ -48,7 +39,7 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const hasherStub = makeHasher();
+  const hasherStub = mockHasher();
   const addAccountRepositoryStub = makeAddAccountRepository();
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
   const sut = new DbAddAccount(
