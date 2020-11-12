@@ -15,6 +15,7 @@ import {
 import { InvalidParamError, ServerError } from '@/presentation/errors';
 import MockDate from 'mockdate';
 import { throwNullStackError } from '@/domain/test/test-helper';
+import { mockSurveyModel } from '@/domain/test';
 
 const makeFakeRequest = (answer = 'any_answer'): HttpRequest => ({
   params: {
@@ -24,18 +25,6 @@ const makeFakeRequest = (answer = 'any_answer'): HttpRequest => ({
     answer
   },
   accountId: 'any_account_id'
-});
-
-const makeFakeSurvey = (): SurveyModel => ({
-  id: 'any_id',
-  question: 'any_question',
-  answers: [
-    {
-      image: 'any_image',
-      answer: 'any_answer'
-    }
-  ],
-  date: new Date()
 });
 
 const makeFakeSurveyResult = (): SurveyResultModel => ({
@@ -55,7 +44,7 @@ type SutTypes = {
 const makeLoadSurveyById = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
     async loadById(id: string): Promise<SurveyModel> {
-      return makeFakeSurvey();
+      return mockSurveyModel();
     }
   }
 

@@ -5,24 +5,15 @@ import {
 import { DbAddSurvey } from './db-add-survey';
 import MockDate from 'mockdate';
 import { throwError } from '@/domain/test/test-helper';
+import { mockAddSurveyRepository } from '@/data/test';
 
 type SutTypes = {
   sut: DbAddSurvey;
   addSurveyRepositoryStub: AddSurveyRepository;
 };
 
-const makeAddSurveyRepository = (): AddSurveyRepository => {
-  class AddSurveyRepositoryStub implements AddSurveyRepository {
-    async add(accountData: AddSurveyParams): Promise<void> {
-      return null;
-    }
-  }
-
-  return new AddSurveyRepositoryStub();
-};
-
 const makeSut = (): SutTypes => {
-  const addSurveyRepositoryStub = makeAddSurveyRepository();
+  const addSurveyRepositoryStub = mockAddSurveyRepository();
   const sut = new DbAddSurvey(addSurveyRepositoryStub);
 
   return {
