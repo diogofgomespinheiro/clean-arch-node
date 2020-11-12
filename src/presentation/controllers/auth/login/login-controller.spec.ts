@@ -13,6 +13,7 @@ import {
 } from '@/presentation/helpers/http/http-helper';
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { AuthenticationParams } from '@/domain/useCases/account/authentication';
+import { throwNullStackError } from '@/domain/test/test-helper';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -81,11 +82,9 @@ describe('Login Controller', () => {
   it('should return 500 if Authentication throws an exception', async () => {
     const { sut, authenticationStub } = makeSut();
 
-    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(authenticationStub, 'auth')
+      .mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));

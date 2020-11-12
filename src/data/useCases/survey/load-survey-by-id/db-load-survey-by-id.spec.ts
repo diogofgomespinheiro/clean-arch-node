@@ -1,3 +1,4 @@
+import { throwError } from '@/domain/test/test-helper';
 import MockDate from 'mockdate';
 import { DbLoadSurveyById } from './db-load-survey-by-id';
 import {
@@ -64,9 +65,7 @@ describe('DbLoadSurveyById', () => {
     const { sut, loadSurveyByIdRepositoryStub } = makeSut();
     jest
       .spyOn(loadSurveyByIdRepositoryStub, 'loadById')
-      .mockImplementationOnce(async () => {
-        throw new Error();
-      });
+      .mockImplementationOnce(throwError);
 
     const promise = sut.loadById('any_id');
     await expect(promise).rejects.toThrow();

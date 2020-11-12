@@ -3,9 +3,9 @@ import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { SaveSurveyResultParams } from '@/domain/useCases/survey-result/save-survey-result';
 import { SurveyModel } from '@/domain/models/survey';
 import { AccountModel } from '@/domain/models/account';
-import { AddAccountParams } from '@/domain/useCases/account/add-account';
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
 import { SurveyResultModel } from '@/domain/models/survey-result';
+import { mockAddAccountParams } from '@/domain/test';
 
 const makeFakeSurveyData = (question = 'any_question'): AddSurveyParams => ({
   question,
@@ -19,12 +19,6 @@ const makeFakeSurveyData = (question = 'any_question'): AddSurveyParams => ({
     }
   ],
   date: new Date()
-});
-
-const makeFakeAccountData = (): AddAccountParams => ({
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password'
 });
 
 const makeFakeSurveyResultData = (
@@ -46,7 +40,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
 
 const makeAccount = async (): Promise<AccountModel> => {
   const accountCollection = await MongoHelper.getCollection('accounts');
-  const res = await accountCollection.insertOne(makeFakeAccountData());
+  const res = await accountCollection.insertOne(mockAddAccountParams());
   return MongoHelper.map(res.ops[0]);
 };
 

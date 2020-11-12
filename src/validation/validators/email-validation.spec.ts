@@ -1,3 +1,4 @@
+import { throwNullStackError } from '@/domain/test/test-helper';
 import { InvalidParamError } from '@/presentation/errors';
 import { EmailValidator } from '@/validation/protocols/email-validator';
 import { EmailValidation } from './email-validation';
@@ -50,11 +51,9 @@ describe('Email Validation', () => {
   it('should throw if EmailValidator throws an exception', async () => {
     const { sut, emailValidatorStub } = makeSut();
 
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(emailValidatorStub, 'isValid')
+      .mockImplementationOnce(throwNullStackError);
 
     expect(sut.validate).toThrow();
   });

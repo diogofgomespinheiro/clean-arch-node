@@ -14,6 +14,7 @@ import {
 } from '@/presentation/helpers/http/http-helper';
 import { InvalidParamError, ServerError } from '@/presentation/errors';
 import MockDate from 'mockdate';
+import { throwNullStackError } from '@/domain/test/test-helper';
 
 const makeFakeRequest = (answer = 'any_answer'): HttpRequest => ({
   params: {
@@ -113,11 +114,9 @@ describe('SaveSurveyResult Controller', () => {
   it('should return 500 if LoadSurveyById throws an exception', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
 
-    jest.spyOn(loadSurveyByIdStub, 'loadById').mockImplementationOnce(() => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(loadSurveyByIdStub, 'loadById')
+      .mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
@@ -147,11 +146,9 @@ describe('SaveSurveyResult Controller', () => {
   it('should return 500 if SaveSurveyResult throws an exception', async () => {
     const { sut, saveSurveyResultStub } = makeSut();
 
-    jest.spyOn(saveSurveyResultStub, 'save').mockImplementationOnce(() => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(saveSurveyResultStub, 'save')
+      .mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));

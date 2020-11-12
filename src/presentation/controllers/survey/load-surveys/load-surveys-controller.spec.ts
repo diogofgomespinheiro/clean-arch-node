@@ -7,6 +7,7 @@ import {
   serverError
 } from '@/presentation/helpers/http/http-helper';
 import { ServerError } from '@/presentation/errors';
+import { throwNullStackError } from '@/domain/test/test-helper';
 
 const makeFakeSurveys = (): SurveyModel[] => {
   return [
@@ -92,11 +93,9 @@ describe('LoadSurveys Controller', () => {
   it('should return 500 if LoadSurveys throws an exception', async () => {
     const { sut, loadSurveysStub } = makeSut();
 
-    jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(() => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(loadSurveysStub, 'load')
+      .mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(serverError(new ServerError(null)));

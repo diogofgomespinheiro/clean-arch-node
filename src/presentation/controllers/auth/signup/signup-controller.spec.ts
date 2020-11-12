@@ -16,6 +16,8 @@ import {
   serverError
 } from '@/presentation/helpers/http/http-helper';
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error';
+import { mockAccountModel } from '@/domain/test';
+import { throwNullStackError } from '@/domain/test/test-helper';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -35,7 +37,7 @@ type SutTypes = {
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     async add(accountData: AddAccountParams): Promise<AccountModel> {
-      return makeFakeAccount();
+      return mockAccountModel();
     }
   }
   return new AddAccountStub();
@@ -60,13 +62,6 @@ const makeAuthentication = (): Authentication => {
 
   return new AuthenticationStub();
 };
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password'
-});
 
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount();
@@ -105,11 +100,9 @@ describe('SignUp Controller', () => {
   it('should return 500 if AddAccount throws an exception', async () => {
     const { sut, addAccountStub } = makeSut();
 
-    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(addAccountStub, 'add')
+      .mockImplementationOnce(throwNullStackError);
 
     const httpRequest = makeFakeRequest();
 
@@ -173,11 +166,9 @@ describe('SignUp Controller', () => {
   it('should return 500 if Authentication throws an exception', async () => {
     const { sut, authenticationStub } = makeSut();
 
-    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(authenticationStub, 'auth')
+      .mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));

@@ -10,6 +10,8 @@ import {
   AccountModel
 } from './auth-middleware-protocols';
 import { AuthMiddleware } from './auth-middleware';
+import { mockAccountModel } from '@/domain/test';
+import { throwNullStackError } from '@/domain/test/test-helper';
 
 const makeFakeRequest = (): HttpRequest => {
   return {
@@ -19,13 +21,6 @@ const makeFakeRequest = (): HttpRequest => {
   };
 };
 
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'hashed_password'
-});
-
 type SutTypes = {
   sut: AuthMiddleware;
   loadAccountByTokenStub: LoadAccountByToken;
@@ -34,7 +29,7 @@ type SutTypes = {
 const makeLoadAccountByToken = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
     async load(accessToken: string, role?: string): Promise<AccountModel> {
-      return makeFakeAccount();
+      return mockAccountModel();
     }
   }
 
@@ -86,18 +81,14 @@ describe('Auth Middleware', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse).toEqual(ok({ accountId: makeFakeAccount().id }));
+    expect(httpResponse).toEqual(ok({ accountId: mockAccountModel().id }));
   });
 
   it('should return 500 if LoadAccountByToken throws', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();
     jest
       .spyOn(loadAccountByTokenStub, 'load')
-      .mockImplementationOnce(async () => {
-        const error = new Error();
-        error.stack = null;
-        throw error;
-      });
+      .mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle(makeFakeRequest());
 

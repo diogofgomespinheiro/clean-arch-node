@@ -13,6 +13,7 @@ import {
   AddSurveyParams
 } from './add-survey-protocols';
 import MockDate from 'mockdate';
+import { throwNullStackError } from '@/domain/test/test-helper';
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -106,11 +107,9 @@ describe('AddSurvey Controller', () => {
   it('should return 500 if AddSurvey throws an exception', async () => {
     const { sut, addSurveyStub } = makeSut();
 
-    jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(() => {
-      const error = new Error();
-      error.stack = null;
-      throw error;
-    });
+    jest
+      .spyOn(addSurveyStub, 'add')
+      .mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
