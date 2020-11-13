@@ -15,7 +15,7 @@ import {
 import { InvalidParamError, ServerError } from '@/presentation/errors';
 import MockDate from 'mockdate';
 import { throwNullStackError } from '@/domain/test/test-helper';
-import { mockSurveyModel } from '@/domain/test';
+import { mockSurveyModel, mockSurveyResultModel } from '@/domain/test';
 
 const makeFakeRequest = (answer = 'any_answer'): HttpRequest => ({
   params: {
@@ -25,14 +25,6 @@ const makeFakeRequest = (answer = 'any_answer'): HttpRequest => ({
     answer
   },
   accountId: 'any_account_id'
-});
-
-const makeFakeSurveyResult = (): SurveyResultModel => ({
-  id: 'any_id',
-  surveyId: 'survey_id',
-  accountId: 'account_id',
-  answer: 'any_answer',
-  date: new Date()
 });
 
 type SutTypes = {
@@ -54,7 +46,7 @@ const makeLoadSurveyById = (): LoadSurveyById => {
 const makeSaveSurveyResult = (): SaveSurveyResult => {
   class SaveSurveyResultStub implements SaveSurveyResult {
     async save(data: SaveSurveyResultParams): Promise<SurveyResultModel> {
-      return makeFakeSurveyResult();
+      return mockSurveyResultModel();
     }
   }
 
@@ -147,6 +139,6 @@ describe('SaveSurveyResult Controller', () => {
     const { sut } = makeSut();
 
     const httpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(ok(makeFakeSurveyResult()));
+    expect(httpResponse).toEqual(ok(mockSurveyResultModel()));
   });
 });

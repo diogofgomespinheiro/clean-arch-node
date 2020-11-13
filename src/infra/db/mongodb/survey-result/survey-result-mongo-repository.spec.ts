@@ -1,27 +1,12 @@
-import { AddSurveyParams } from '@/domain/useCases/survey/add-survey';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { SaveSurveyResultParams } from '@/domain/useCases/survey-result/save-survey-result';
 import { SurveyModel } from '@/domain/models/survey';
 import { AccountModel } from '@/domain/models/account';
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
 import { SurveyResultModel } from '@/domain/models/survey-result';
-import { mockAddAccountParams } from '@/domain/test';
+import { mockAddAccountParams, mockAddSurveyParams } from '@/domain/test';
 
-const makeFakeSurveyData = (question = 'any_question'): AddSurveyParams => ({
-  question,
-  answers: [
-    {
-      image: 'any_image',
-      answer: 'any_answer'
-    },
-    {
-      answer: 'other_answer'
-    }
-  ],
-  date: new Date()
-});
-
-const makeFakeSurveyResultData = (
+const mockSurveyResultParams = (
   account: AccountModel,
   survey: SurveyModel,
   answerIndex = 0
@@ -34,7 +19,7 @@ const makeFakeSurveyResultData = (
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const surveyCollection = await MongoHelper.getCollection('surveys');
-  const res = await surveyCollection.insertOne(makeFakeSurveyData());
+  const res = await surveyCollection.insertOne(mockAddSurveyParams());
   return MongoHelper.map(res.ops[0]);
 };
 
@@ -64,7 +49,7 @@ describe('Survey Result Mongo Repository', () => {
       const sut = makeSut();
 
       const surveyResult = await sut.save(
-        makeFakeSurveyResultData(account, survey)
+        mockSurveyResultParams(account, survey)
       );
 
       expect(surveyResult).toBeTruthy();
@@ -77,12 +62,12 @@ describe('Survey Result Mongo Repository', () => {
       const account = await makeAccount();
 
       const surveyResultBeforeUpdate = await makeSurveyResult(
-        makeFakeSurveyResultData(account, survey)
+        mockSurveyResultParams(account, survey)
       );
       const sut = makeSut();
 
       const surveyResultAfterUpdate = await sut.save(
-        makeFakeSurveyResultData(account, survey, 1)
+        mockSurveyResultParams(account, survey, 1)
       );
 
       expect(surveyResultAfterUpdate).toBeTruthy();

@@ -1,21 +1,7 @@
-import { AddSurveyParams } from '@/domain/useCases/survey/add-survey';
 import { Collection } from 'mongodb';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { SurveyMongoRepository } from './survey-mongo-repository';
-
-const makeFakeSurveyData = (question = 'any_question'): AddSurveyParams => ({
-  question,
-  answers: [
-    {
-      image: 'any_image',
-      answer: 'any_answer'
-    },
-    {
-      answer: 'other_answer'
-    }
-  ],
-  date: new Date()
-});
+import { mockAddSurveyParams } from '@/domain/test';
 
 const makeSurveyCollection = async (): Promise<Collection> => {
   return await MongoHelper.getCollection('surveys');
@@ -29,7 +15,7 @@ describe('Survey Mongo Repository', () => {
   describe('add()', () => {
     it('should add a survey on success', async () => {
       const sut = makeSut();
-      const surveyData = makeFakeSurveyData();
+      const surveyData = mockAddSurveyParams();
 
       await sut.add(surveyData);
 
@@ -47,8 +33,8 @@ describe('Survey Mongo Repository', () => {
     it('should load all surveys on success', async () => {
       const surveyCollection = await makeSurveyCollection();
       const surveysToInsert = [
-        makeFakeSurveyData(),
-        makeFakeSurveyData('other_question')
+        mockAddSurveyParams(),
+        mockAddSurveyParams('other_question')
       ];
       await surveyCollection.insertMany(surveysToInsert);
 
@@ -73,7 +59,7 @@ describe('Survey Mongo Repository', () => {
   describe('loadById', () => {
     it('should load survey by id on success', async () => {
       const surveyCollection = await makeSurveyCollection();
-      const res = await surveyCollection.insertOne(makeFakeSurveyData());
+      const res = await surveyCollection.insertOne(mockAddSurveyParams());
 
       const id = res.ops[0]._id;
       const sut = makeSut();
