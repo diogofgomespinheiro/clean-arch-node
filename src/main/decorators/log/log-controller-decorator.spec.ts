@@ -9,7 +9,7 @@ import { LogControllerDecorator } from './log-controller-decorator';
 import { mockAccountModel } from '@/domain/test';
 import { mockLogErrorRepository } from '@/data/test';
 
-const makeFakeRequest = (): HttpRequest => ({
+const mockRequest = (): HttpRequest => ({
   body: {
     name: 'any_name',
     email: 'any_email@mail.com',
@@ -63,7 +63,7 @@ describe('LogController Decorator', () => {
     const { sut, controllerStub } = makeSut();
     const handleSpy = jest.spyOn(controllerStub, 'handle');
 
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
 
     await sut.handle(httpRequest);
     expect(handleSpy).toHaveBeenCalledWith(httpRequest);
@@ -72,7 +72,7 @@ describe('LogController Decorator', () => {
   it('should return the same result of the controller', async () => {
     const { sut } = makeSut();
 
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(ok(mockAccountModel()));
   });
 
@@ -84,7 +84,7 @@ describe('LogController Decorator', () => {
       return makeFakeServerError();
     });
 
-    await sut.handle(makeFakeRequest());
+    await sut.handle(mockRequest());
     expect(logSpy).toHaveBeenCalledWith('any_stack');
   });
 });

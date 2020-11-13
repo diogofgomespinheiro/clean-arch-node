@@ -20,5 +20,5 @@ module.exports = {
       }
     ]
   ],
-  ignore: ['**/*.spec.ts', '**/*.test.ts', 'src/test', 'src/**/test']
+  ignore: ['**/*.spec.ts', '**/*.test.ts', '**/test/**']
 };

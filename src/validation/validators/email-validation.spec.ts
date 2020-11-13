@@ -1,7 +1,7 @@
 import { EmailValidation } from './email-validation';
 import { EmailValidator } from '@/validation/protocols/email-validator';
 import { InvalidParamError } from '@/presentation/errors';
-import { mockEmailValidator } from '../test';
+import { mockEmailValidator } from '@/validation/test';
 import { throwNullStackError } from '@/domain/test/test-helper';
 
 type SutTypes = {

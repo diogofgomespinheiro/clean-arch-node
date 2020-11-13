@@ -12,7 +12,7 @@ import {
   mockLoadAccountByEmailRepository,
   mockUpdateAccessTokenRepository
 } from '@/data/test';
-import { mockAuthentication } from '@/domain/test';
+import { mockAuthenticationParams } from '@/domain/test';
 
 type SutTypes = {
   sut: DbAuthentication;
@@ -49,7 +49,7 @@ describe('DbAuthentication Use Case', () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail');
 
-    const fakeAuthentication = mockAuthentication();
+    const fakeAuthentication = mockAuthenticationParams();
     await sut.auth(fakeAuthentication);
 
     expect(loadSpy).toHaveBeenCalledWith(fakeAuthentication.email);
@@ -61,7 +61,7 @@ describe('DbAuthentication Use Case', () => {
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
       .mockImplementationOnce(throwError);
 
-    const promise = sut.auth(mockAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
 
     expect(promise).rejects.toThrow();
   });
@@ -72,7 +72,7 @@ describe('DbAuthentication Use Case', () => {
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
       .mockReturnValueOnce(null);
 
-    const accessToken = await sut.auth(mockAuthentication());
+    const accessToken = await sut.auth(mockAuthenticationParams());
 
     expect(accessToken).toBeNull();
   });
@@ -81,7 +81,7 @@ describe('DbAuthentication Use Case', () => {
     const { sut, hashComparerStub } = makeSut();
     const compareSpy = jest.spyOn(hashComparerStub, 'compare');
 
-    await sut.auth(mockAuthentication());
+    await sut.auth(mockAuthenticationParams());
 
     expect(compareSpy).toHaveBeenCalledWith('any_password', 'hashed_password');
   });
@@ -90,7 +90,7 @@ describe('DbAuthentication Use Case', () => {
     const { sut, hashComparerStub } = makeSut();
     jest.spyOn(hashComparerStub, 'compare').mockImplementationOnce(throwError);
 
-    const promise = sut.auth(mockAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
 
     expect(promise).rejects.toThrow();
   });
@@ -101,7 +101,7 @@ describe('DbAuthentication Use Case', () => {
       .spyOn(hashComparerStub, 'compare')
       .mockImplementationOnce(async () => false);
 
-    const accessToken = await sut.auth(mockAuthentication());
+    const accessToken = await sut.auth(mockAuthenticationParams());
 
     expect(accessToken).toBeNull();
   });
@@ -110,7 +110,7 @@ describe('DbAuthentication Use Case', () => {
     const { sut, encrypterStub } = makeSut();
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
 
-    await sut.auth(mockAuthentication());
+    await sut.auth(mockAuthenticationParams());
 
     expect(encryptSpy).toHaveBeenCalledWith('any_id');
   });
@@ -119,7 +119,7 @@ describe('DbAuthentication Use Case', () => {
     const { sut, encrypterStub } = makeSut();
     jest.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(throwError);
 
-    const promise = sut.auth(mockAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
 
     expect(promise).rejects.toThrow();
   });
@@ -127,7 +127,7 @@ describe('DbAuthentication Use Case', () => {
   it('should return a token on success', async () => {
     const { sut } = makeSut();
 
-    const accessToken = await sut.auth(mockAuthentication());
+    const accessToken = await sut.auth(mockAuthenticationParams());
 
     expect(accessToken).toBe('any_token');
   });
@@ -139,7 +139,7 @@ describe('DbAuthentication Use Case', () => {
       'updateAccessToken'
     );
 
-    await sut.auth(mockAuthentication());
+    await sut.auth(mockAuthenticationParams());
 
     expect(updateSpy).toHaveBeenCalledWith('any_id', 'any_token');
   });
@@ -150,7 +150,7 @@ describe('DbAuthentication Use Case', () => {
       .spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken')
       .mockImplementationOnce(throwError);
 
-    const promise = sut.auth(mockAuthentication());
+    const promise = sut.auth(mockAuthenticationParams());
 
     expect(promise).rejects.toThrow();
   });

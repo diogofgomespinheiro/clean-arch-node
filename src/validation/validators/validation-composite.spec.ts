@@ -1,5 +1,5 @@
 import { MissingParamError } from '@/presentation/errors';
-import { mockValidation } from '../test';
+import { mockValidation } from '@/validation/test';
 import { Validation } from '@/presentation/protocols';
 import { ValidationComposite } from './validation-composite';
 
