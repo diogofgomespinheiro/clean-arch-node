@@ -2,12 +2,20 @@ import {
   accountSchema,
   loginParamsSchema,
   errorSchema,
-  errorsSchema
+  errorsSchema,
+  surveyAnswerSchema,
+  surveySchema,
+  surveysSchema,
+  signUpParamsSchema
 } from './schemas/';
 
 export default {
   account: accountSchema,
   loginParams: loginParamsSchema,
   error: errorSchema,
-  errors: errorsSchema
+  errors: errorsSchema,
+  surveyAnswer: surveyAnswerSchema,
+  survey: surveySchema,
+  surveys: surveysSchema,
+  signUpParams: signUpParamsSchema
 };

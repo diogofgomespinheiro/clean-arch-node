@@ -20,7 +20,10 @@ export default {
   ],
   tags: [
     {
-      name: 'Login'
+      name: 'Auth'
+    },
+    {
+      name: 'Survey'
     }
   ],
   paths,
