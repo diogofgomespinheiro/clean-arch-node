@@ -1,7 +1,8 @@
-import { loginPath, surveysPath, signUpPath } from './paths/';
+import { loginPath, surveysPath, signUpPath, surveyResultPath } from './paths/';
 
 export default {
   '/login': loginPath,
   '/signup': signUpPath,
-  '/surveys': surveysPath
+  '/surveys': surveysPath,
+  '/surveys/{surveyId}/results': surveyResultPath
 };

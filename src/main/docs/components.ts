@@ -1,9 +1,9 @@
 import {
   badRequest,
-  serverError,
-  unauthorized,
+  forbidden,
   notFound,
-  forbidden
+  serverError,
+  unauthorized
 } from './components/';
 import { apiKeyAuthSchema } from './schemas/';
 
@@ -12,8 +12,8 @@ export default {
     apiKeyAuth: apiKeyAuthSchema
   },
   badRequest,
-  serverError,
-  unauthorized,
+  forbidden,
   notFound,
-  forbidden
+  serverError,
+  unauthorized
 };
