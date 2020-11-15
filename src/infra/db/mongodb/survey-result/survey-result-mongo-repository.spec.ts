@@ -5,6 +5,7 @@ import { AccountModel } from '@/domain/models/account';
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
 import { SurveyResultModel } from '@/domain/models/survey-result';
 import { mockAddAccountParams, mockAddSurveyParams } from '@/domain/test';
+import { ObjectId } from 'mongodb';
 
 const mockSurveyResultParams = (
   account: AccountModel,
@@ -33,7 +34,11 @@ const makeSurveyResult = async (
   data: SaveSurveyResultParams
 ): Promise<SurveyResultModel> => {
   const surveyCollection = await MongoHelper.getCollection('surveyResults');
-  const res = await surveyCollection.insertOne(data);
+  const res = await surveyCollection.insertOne({
+    ...data,
+    surveyId: new ObjectId(data.surveyId),
+    accountId: new ObjectId(data.accountId)
+  });
   return MongoHelper.map(res.ops[0]);
 };
 
@@ -53,17 +58,16 @@ describe('Survey Result Mongo Repository', () => {
       );
 
       expect(surveyResult).toBeTruthy();
-      expect(surveyResult.id).toBeTruthy();
-      expect(surveyResult.answer).toBe(survey.answers[0].answer);
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].count).toBe(1);
+      expect(surveyResult.answers[0].percent).toBe(100);
     });
 
     it('should update a survey result if it`s not new', async () => {
       const survey = await makeSurvey();
       const account = await makeAccount();
 
-      const surveyResultBeforeUpdate = await makeSurveyResult(
-        mockSurveyResultParams(account, survey)
-      );
+      await makeSurveyResult(mockSurveyResultParams(account, survey));
       const sut = makeSut();
 
       const surveyResultAfterUpdate = await sut.save(
@@ -71,8 +75,11 @@ describe('Survey Result Mongo Repository', () => {
       );
 
       expect(surveyResultAfterUpdate).toBeTruthy();
-      expect(surveyResultAfterUpdate.id).toEqual(surveyResultBeforeUpdate.id);
-      expect(surveyResultAfterUpdate.answer).toBe(survey.answers[1].answer);
+      expect(surveyResultAfterUpdate.answers[0].count).toBe(1);
+      expect(surveyResultAfterUpdate.answers[0].percent).toBe(100);
+      expect(surveyResultAfterUpdate.answers[0].answer).toBe(
+        survey.answers[1].answer
+      );
     });
   });
 });
