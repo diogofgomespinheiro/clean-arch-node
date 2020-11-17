@@ -61,6 +61,8 @@ describe('Survey Result Mongo Repository', () => {
       expect(surveyResult.surveyId).toEqual(survey.id);
       expect(surveyResult.answers[0].count).toBe(1);
       expect(surveyResult.answers[0].percent).toBe(100);
+      expect(surveyResult.answers[1].percent).toBe(0);
+      expect(surveyResult.answers[1].percent).toBe(0);
     });
 
     it('should update a survey result if it`s not new', async () => {
@@ -80,6 +82,8 @@ describe('Survey Result Mongo Repository', () => {
       expect(surveyResultAfterUpdate.answers[0].answer).toBe(
         survey.answers[1].answer
       );
+      expect(surveyResultAfterUpdate.answers[1].count).toBe(0);
+      expect(surveyResultAfterUpdate.answers[1].percent).toBe(0);
     });
   });
 });
