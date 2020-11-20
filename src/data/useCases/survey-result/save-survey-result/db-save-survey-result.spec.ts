@@ -3,7 +3,6 @@ import {
   SaveSurveyResultRepository,
   LoadSurveyResultRepository
 } from './db-save-survey-result-protocols';
-import MockDate from 'mockdate';
 import { throwError } from '@/domain/test/test-helper';
 import {
   mockSurveyResultModel,
@@ -36,14 +35,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbSaveSurveyResult Usecase', () => {
-  beforeAll(() => {
-    MockDate.set(new Date());
-  });
-
-  afterAll(() => {
-    MockDate.reset();
-  });
-
   it('should call SaveSurveyResultRepository with correct values', async () => {
     const { sut, saveSurveyResultRepositoryStub } = makeSut();
     const saveSpy = jest.spyOn(saveSurveyResultRepositoryStub, 'save');

@@ -6,7 +6,6 @@ import { SurveyResultMongoRepository } from './survey-result-mongo-repository';
 import { SurveyResultModel } from '@/domain/models/survey-result';
 import { mockAddAccountParams, mockAddSurveyParams } from '@/domain/test';
 import { ObjectId } from 'mongodb';
-import MockDate from 'mockdate';
 
 const mockSurveyResultParams = (
   account: AccountModel,
@@ -66,14 +65,6 @@ const makeSut = (): SurveyResultMongoRepository => {
 };
 
 describe('Survey Result Mongo Repository', () => {
-  beforeAll(() => {
-    MockDate.set(new Date());
-  });
-
-  afterAll(() => {
-    MockDate.reset();
-  });
-
   describe('save()', () => {
     it('should add a survey result if it`s new', async () => {
       const survey = await makeSurvey();
