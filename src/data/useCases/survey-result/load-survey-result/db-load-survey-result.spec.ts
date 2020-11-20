@@ -1,18 +1,29 @@
-import { mockLoadSurveyResultRepository } from '@/data/test';
+import {
+  mockLoadSurveyByIdRepository,
+  mockLoadSurveyResultRepository
+} from '@/data/test';
 import { mockSurveyResultModel } from '@/domain/test';
 import { throwError } from '@/domain/test/test-helper';
 import { DbLoadSurveyResult } from './db-load-survey-result';
-import { LoadSurveyResultRepository } from './db-load-survey-result-protocols';
+import {
+  LoadSurveyResultRepository,
+  LoadSurveyByIdRepository
+} from './db-load-survey-result-protocols';
 
 type SutTypes = {
   sut: DbLoadSurveyResult;
   loadSurveyResultRepositoryStub: LoadSurveyResultRepository;
+  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository;
 };
 
 const makeSut = (): SutTypes => {
   const loadSurveyResultRepositoryStub = mockLoadSurveyResultRepository();
-  const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub);
-  return { sut, loadSurveyResultRepositoryStub };
+  const loadSurveyByIdRepositoryStub = mockLoadSurveyByIdRepository();
+  const sut = new DbLoadSurveyResult(
+    loadSurveyResultRepositoryStub,
+    loadSurveyByIdRepositoryStub
+  );
+  return { sut, loadSurveyResultRepositoryStub, loadSurveyByIdRepositoryStub };
 };
 
 describe('DbLoadSurveyResult use case', () => {
@@ -35,6 +46,21 @@ describe('DbLoadSurveyResult use case', () => {
 
     const promise = sut.load('any_survey_id');
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should call LoadSurveyByIdRepository if LoadSurveyResultRepository returns null', async () => {
+    const {
+      sut,
+      loadSurveyByIdRepositoryStub,
+      loadSurveyResultRepositoryStub
+    } = makeSut();
+    const loadByIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById');
+    jest
+      .spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+      .mockImplementationOnce(async () => null);
+
+    await sut.load('any_survey_id');
+    expect(loadByIdSpy).toHaveBeenCalledWith('any_survey_id');
   });
 
   it('should return a surveyResult on success', async () => {
