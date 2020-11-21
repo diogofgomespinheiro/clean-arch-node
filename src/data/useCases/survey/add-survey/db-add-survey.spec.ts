@@ -1,5 +1,6 @@
 import { AddSurveyRepository } from './db-add-survey-protocols';
 import { DbAddSurvey } from './db-add-survey';
+import MockDate from 'mockdate';
 import { throwError } from '@/domain/test/test-helper';
 import { mockAddSurveyRepository } from '@/data/test';
 import { mockAddSurveyParams } from '@/domain/test';
@@ -20,6 +21,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbAddSurvey Usecase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   it('should call AddSurveyRepository with correct values', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut();
 

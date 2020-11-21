@@ -10,6 +10,7 @@ import {
   serverError
 } from '@/presentation/helpers/http/http-helper';
 import { InvalidParamError, ServerError } from '@/presentation/errors';
+import MockDate from 'mockdate';
 import { throwNullStackError } from '@/domain/test/test-helper';
 import { mockSurveyResultModel } from '@/domain/test';
 import { mockLoadSurveyById, mockSaveSurveyResult } from '@/presentation/test';
@@ -42,6 +43,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('SaveSurveyResult Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   it('should call LoadSurveyById with correct values', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     const loadByIdSpy = jest.spyOn(loadSurveyByIdStub, 'loadById');
