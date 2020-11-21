@@ -6,7 +6,6 @@ import {
 } from '@/presentation/helpers/http/http-helper';
 import { AddSurveyController } from './add-survey-controller';
 import { HttpRequest, Validation, AddSurvey } from './add-survey-protocols';
-import MockDate from 'mockdate';
 import { throwNullStackError } from '@/domain/test/test-helper';
 import { mockValidation } from '@/validation/test';
 import { mockAddSurvey } from '@/presentation/test';
@@ -38,14 +37,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('AddSurvey Controller', () => {
-  beforeAll(() => {
-    MockDate.set(new Date());
-  });
-
-  afterAll(() => {
-    MockDate.reset();
-  });
-
   it('should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut();
 
