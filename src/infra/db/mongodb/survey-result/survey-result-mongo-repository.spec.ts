@@ -110,6 +110,14 @@ describe('Survey Result Mongo Repository', () => {
       expect(surveyResult.answers[0].percent).toBe(75);
       expect(surveyResult.answers[1].count).toBe(1);
       expect(surveyResult.answers[1].percent).toBe(25);
+      expect(surveyResult.answers.length).toBe(survey.answers.length);
+    });
+
+    it('should return null if no surveyResult is found', async () => {
+      const survey = await makeSurvey();
+      const sut = makeSut();
+      const surveyResult = await sut.loadBySurveyId(survey.id);
+      expect(surveyResult).toBeNull();
     });
   });
 });
