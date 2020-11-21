@@ -7,10 +7,12 @@ import { LoadSurveyResultController } from './load-survey-result-controller';
 import { mockLoadSurveyById, mockLoadSurveyResult } from '@/presentation/test';
 import {
   forbidden,
+  ok,
   serverError
 } from '@/presentation/helpers/http/http-helper';
 import { InvalidParamError, ServerError } from '@/presentation/errors';
 import { throwNullStackError } from '@/domain/test/test-helper';
+import { mockSurveyResultModel } from '@/domain/test';
 
 const mockRequest = (): HttpRequest => {
   return {
@@ -88,5 +90,11 @@ describe('LoadSurveyResult Controller', () => {
     const httpResponse = await sut.handle(mockRequest());
 
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  it('should return 200 on success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle(mockRequest());
+    expect(httpResponse).toEqual(ok(mockSurveyResultModel()));
   });
 });
