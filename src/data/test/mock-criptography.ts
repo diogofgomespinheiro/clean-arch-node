@@ -2,43 +2,44 @@ import { Decrypter } from '@/data/protocols/criptography/decrypter';
 import { Encrypter } from '@/data/protocols/criptography/encrypter';
 import { HashComparer } from '@/data/protocols/criptography/hash-comparer';
 import { Hasher } from '@/data/protocols/criptography/hasher';
+import faker from 'faker';
+export class HasherSpy implements Hasher {
+  digest = faker.random.uuid();
+  plainText: string;
 
-export const mockHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash(value: string): Promise<string> {
-      return 'hashed_password';
-    }
+  async hash(plainText: string): Promise<string> {
+    this.plainText = plainText;
+    return this.digest;
   }
+}
+export class DecrypterSpy implements Decrypter {
+  plainText = faker.internet.password();
+  cipherText: string;
 
-  return new HasherStub();
-};
-
-export const mockDecrypter = (): Decrypter => {
-  class DecrypterStub implements Decrypter {
-    async decrypt(value: string): Promise<string> {
-      return 'any_value';
-    }
+  async decrypt(cipherText: string): Promise<string> {
+    this.cipherText = cipherText;
+    return this.plainText;
   }
+}
 
-  return new DecrypterStub();
-};
+export class EncrypterSpy implements Encrypter {
+  cipherText = faker.random.uuid();
+  plainText: string;
 
-export const mockEncrypter = (): Encrypter => {
-  class EncrypterStub implements Encrypter {
-    async encrypt(value: string): Promise<string> {
-      return 'any_token';
-    }
+  async encrypt(plainText: string): Promise<string> {
+    this.plainText = plainText;
+    return this.cipherText;
   }
+}
 
-  return new EncrypterStub();
-};
+export class HashComparerSpy implements HashComparer {
+  plainText: string;
+  digest: string;
+  isValid = true;
 
-export const mockHashComparer = (): HashComparer => {
-  class HashComparerStub implements HashComparer {
-    async compare(value: string, hash: string): Promise<boolean> {
-      return true;
-    }
+  async compare(plainText: string, digest: string): Promise<boolean> {
+    this.plainText = plainText;
+    this.digest = digest;
+    return this.isValid;
   }
-
-  return new HashComparerStub();
-};
+}

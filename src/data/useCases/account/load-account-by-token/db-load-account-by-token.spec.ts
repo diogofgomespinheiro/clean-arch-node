@@ -1,41 +1,37 @@
 import { DbLoadAccountByToken } from './db-load-account-by-token';
 import { mockAccountModel } from '@/domain/test';
-import {
-  Decrypter,
-  LoadAccountByTokenRepository
-} from './db-load-account-by-token-protocols';
+import { LoadAccountByTokenRepository } from './db-load-account-by-token-protocols';
 import { throwError } from '@/domain/test/test-helper';
-import { mockDecrypter, mockLoadAccountByTokenRepository } from '@/data/test';
+import { DecrypterSpy, mockLoadAccountByTokenRepository } from '@/data/test';
 
 type SutTypes = {
   sut: DbLoadAccountByToken;
-  decrypterStub: Decrypter;
+  decrypterSpy: DecrypterSpy;
   loadAccountByTokenRepositoryStub: LoadAccountByTokenRepository;
 };
 
 const makeSut = (): SutTypes => {
-  const decrypterStub = mockDecrypter();
+  const decrypterSpy = new DecrypterSpy();
   const loadAccountByTokenRepositoryStub = mockLoadAccountByTokenRepository();
 
   const sut = new DbLoadAccountByToken(
-    decrypterStub,
+    decrypterSpy,
     loadAccountByTokenRepositoryStub
   );
 
-  return { sut, decrypterStub, loadAccountByTokenRepositoryStub };
+  return { sut, decrypterSpy, loadAccountByTokenRepositoryStub };
 };
 
 describe('DbLoadAccountByToken Usecase', () => {
-  it('should call Decrypter with correct values', async () => {
-    const { sut, decrypterStub } = makeSut();
-    const decryptSpy = jest.spyOn(decrypterStub, 'decrypt');
+  it('should call Decrypter with correct chiperText', async () => {
+    const { sut, decrypterSpy } = makeSut();
     await sut.load('any_token', 'any_role');
-    expect(decryptSpy).toHaveBeenCalledWith('any_token');
+    expect(decrypterSpy.cipherText).toBe('any_token');
   });
 
   it('should return null if Decrypter returns null', async () => {
-    const { sut, decrypterStub } = makeSut();
-    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(null);
+    const { sut, decrypterSpy } = makeSut();
+    decrypterSpy.plainText = null;
     const account = await sut.load('any_token', 'any_role');
     expect(account).toBeNull();
   });
@@ -63,8 +59,8 @@ describe('DbLoadAccountByToken Usecase', () => {
   });
 
   it('should throw if Decrypter throws', async () => {
-    const { sut, decrypterStub } = makeSut();
-    jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(throwError);
+    const { sut, decrypterSpy } = makeSut();
+    jest.spyOn(decrypterSpy, 'decrypt').mockImplementationOnce(throwError);
 
     const promise = sut.load('any_token', 'any_role');
     await expect(promise).rejects.toThrow();
