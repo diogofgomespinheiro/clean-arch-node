@@ -3,6 +3,7 @@ import { Encrypter } from '@/data/protocols/criptography/encrypter';
 import { HashComparer } from '@/data/protocols/criptography/hash-comparer';
 import { Hasher } from '@/data/protocols/criptography/hasher';
 import faker from 'faker';
+
 export class HasherSpy implements Hasher {
   digest = faker.random.uuid();
   plainText: string;

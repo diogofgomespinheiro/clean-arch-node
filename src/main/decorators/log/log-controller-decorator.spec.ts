@@ -4,10 +4,9 @@ import {
   HttpRequest,
   HttpResponse
 } from '@/presentation/protocols';
-import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository';
 import { LogControllerDecorator } from './log-controller-decorator';
 import { mockAccountModel } from '@/domain/test';
-import { mockLogErrorRepository } from '@/data/test';
+import { LogErrorRepositorySpy } from '@/data/test';
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -28,7 +27,7 @@ const makeFakeServerError = (): HttpResponse => {
 
 type SutTypes = {
   controllerStub: Controller;
-  logErrorRepositoryStub: LogErrorRepository;
+  logErrorRepositorySpy: LogErrorRepositorySpy;
   sut: LogControllerDecorator;
 };
 
@@ -45,15 +44,12 @@ const makeController = (): Controller => {
 
 const makeSut = (): SutTypes => {
   const controllerStub = makeController();
-  const logErrorRepositoryStub = mockLogErrorRepository();
-  const sut = new LogControllerDecorator(
-    controllerStub,
-    logErrorRepositoryStub
-  );
+  const logErrorRepositorySpy = new LogErrorRepositorySpy();
+  const sut = new LogControllerDecorator(controllerStub, logErrorRepositorySpy);
 
   return {
     controllerStub,
-    logErrorRepositoryStub,
+    logErrorRepositorySpy,
     sut
   };
 };
@@ -77,14 +73,14 @@ describe('LogController Decorator', () => {
   });
 
   it('should call LogErrorRepository with correct error if controller returns a server error', async () => {
-    const { sut, controllerStub, logErrorRepositoryStub } = makeSut();
+    const { sut, controllerStub, logErrorRepositorySpy } = makeSut();
+    const serverError = makeFakeServerError();
 
-    const logSpy = jest.spyOn(logErrorRepositoryStub, 'logError');
     jest.spyOn(controllerStub, 'handle').mockImplementationOnce(async () => {
-      return makeFakeServerError();
+      return serverError;
     });
 
     await sut.handle(mockRequest());
-    expect(logSpy).toHaveBeenCalledWith('any_stack');
+    expect(logErrorRepositorySpy.stack).toBe(serverError.body[0].stack);
   });
 });
