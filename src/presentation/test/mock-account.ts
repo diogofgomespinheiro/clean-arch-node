@@ -12,7 +12,7 @@ import { LoadAccountByToken } from '@/domain/useCases/account/load-account-by-to
 
 export const mockAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add(accountData: AddAccountParams): Promise<AccountModel> {
+    async add(data: AddAccountParams): Promise<AccountModel> {
       return mockAccountModel();
     }
   }

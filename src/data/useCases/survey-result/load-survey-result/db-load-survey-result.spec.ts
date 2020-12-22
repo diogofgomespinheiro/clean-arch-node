@@ -1,27 +1,26 @@
 import {
-  mockLoadSurveyByIdRepository,
+  LoadSurveyByIdRepositorySpy,
   LoadSurveyResultRepositorySpy
 } from '@/data/test';
 import { mockEmptySurveyResultModel } from '@/domain/test';
 import { throwError } from '@/domain/test/test-helper';
 import faker from 'faker';
 import { DbLoadSurveyResult } from './db-load-survey-result';
-import { LoadSurveyByIdRepository } from './db-load-survey-result-protocols';
 
 type SutTypes = {
   sut: DbLoadSurveyResult;
   loadSurveyResultRepositorySpy: LoadSurveyResultRepositorySpy;
-  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository;
+  loadSurveyByIdRepositorySpy: LoadSurveyByIdRepositorySpy;
 };
 
 const makeSut = (): SutTypes => {
   const loadSurveyResultRepositorySpy = new LoadSurveyResultRepositorySpy();
-  const loadSurveyByIdRepositoryStub = mockLoadSurveyByIdRepository();
+  const loadSurveyByIdRepositorySpy = new LoadSurveyByIdRepositorySpy();
   const sut = new DbLoadSurveyResult(
     loadSurveyResultRepositorySpy,
-    loadSurveyByIdRepositoryStub
+    loadSurveyByIdRepositorySpy
   );
-  return { sut, loadSurveyResultRepositorySpy, loadSurveyByIdRepositoryStub };
+  return { sut, loadSurveyResultRepositorySpy, loadSurveyByIdRepositorySpy };
 };
 
 let surveyId: string;
@@ -50,14 +49,13 @@ describe('DbLoadSurveyResult use case', () => {
   it('should call LoadSurveyByIdRepository if LoadSurveyResultRepository returns null', async () => {
     const {
       sut,
-      loadSurveyByIdRepositoryStub,
+      loadSurveyByIdRepositorySpy,
       loadSurveyResultRepositorySpy
     } = makeSut();
-    const loadByIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById');
     loadSurveyResultRepositorySpy.surveyResultModel = null;
 
     await sut.load(surveyId);
-    expect(loadByIdSpy).toHaveBeenCalledWith(surveyId);
+    expect(loadSurveyByIdRepositorySpy.surveyId).toBe(surveyId);
   });
 
   it('should return a surveyResult with all answers with count 0 if LoadSurveyResultRepository returns null', async () => {

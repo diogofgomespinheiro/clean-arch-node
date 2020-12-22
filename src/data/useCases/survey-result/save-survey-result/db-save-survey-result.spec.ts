@@ -1,9 +1,6 @@
 import { DbSaveSurveyResult } from './db-save-survey-result';
 import { throwError } from '@/domain/test/test-helper';
-import {
-  mockSurveyResultModel,
-  mockSaveSurveyResultParams
-} from '@/domain/test';
+import { mockSaveSurveyResultParams } from '@/domain/test';
 import {
   LoadSurveyResultRepositorySpy,
   SaveSurveyResultRepositorySpy
@@ -52,9 +49,11 @@ describe('DbSaveSurveyResult Usecase', () => {
   });
 
   it('should return a survey result on success', async () => {
-    const { sut } = makeSut();
+    const { sut, loadSurveyResultRepositorySpy } = makeSut();
     const surveyResult = await sut.save(mockSaveSurveyResultParams());
-    expect(surveyResult).toEqual(mockSurveyResultModel());
+    expect(surveyResult).toEqual(
+      loadSurveyResultRepositorySpy.surveyResultModel
+    );
   });
 
   it('should throw if SaveSurveyResultRepositoryStub throws', async () => {
