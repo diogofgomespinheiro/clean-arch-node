@@ -7,29 +7,31 @@ import { mockSurveyModel, mockSurveyModels } from '@/domain/test';
 import { LoadSurveys } from '@/domain/useCases/survey/load-surveys';
 import { LoadSurveyById } from '@/domain/useCases/survey/load-survey-by-id';
 
-export const mockAddSurvey = (): AddSurvey => {
-  class AddSurveyStub implements AddSurvey {
-    add(data: AddSurveyParams): Promise<void> {
-      return null;
-    }
-  }
-  return new AddSurveyStub();
-};
+export class AddSurveySpy implements AddSurvey {
+  addSurveyParams: AddSurveyParams;
 
-export const mockLoadSurveys = (): LoadSurveys => {
-  class LoadSurveysStub implements LoadSurveys {
-    async load(): Promise<SurveyModel[]> {
-      return mockSurveyModels();
-    }
+  add(data: AddSurveyParams): Promise<void> {
+    this.addSurveyParams = data;
+    return null;
   }
-  return new LoadSurveysStub();
-};
+}
 
-export const mockLoadSurveyById = (): LoadSurveyById => {
-  class LoadSurveyByIdStub implements LoadSurveyById {
-    async loadById(id: string): Promise<SurveyModel> {
-      return mockSurveyModel();
-    }
+export class LoadSurveysSpy implements LoadSurveys {
+  surveyModels = mockSurveyModels();
+  callsCount = 0;
+
+  async load(): Promise<SurveyModel[]> {
+    this.callsCount++;
+    return this.surveyModels;
   }
-  return new LoadSurveyByIdStub();
-};
+}
+
+export class LoadSurveyByIdSpy implements LoadSurveyById {
+  surveyModel = mockSurveyModel();
+  surveyId: string;
+
+  async loadById(id: string): Promise<SurveyModel> {
+    this.surveyId = id;
+    return this.surveyModel;
+  }
+}

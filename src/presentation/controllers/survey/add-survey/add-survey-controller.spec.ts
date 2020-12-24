@@ -5,10 +5,10 @@ import {
   noContent
 } from '@/presentation/helpers/http/http-helper';
 import { AddSurveyController } from './add-survey-controller';
-import { HttpRequest, Validation, AddSurvey } from './add-survey-protocols';
+import { HttpRequest, Validation } from './add-survey-protocols';
 import { throwNullStackError } from '@/domain/test/test-helper';
 import { mockValidation } from '@/validation/test';
-import { mockAddSurvey } from '@/presentation/test';
+import { AddSurveySpy } from '@/presentation/test';
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -26,14 +26,14 @@ const mockRequest = (): HttpRequest => ({
 type SutTypes = {
   sut: AddSurveyController;
   validationStub: Validation;
-  addSurveyStub: AddSurvey;
+  addSurveySpy: AddSurveySpy;
 };
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation();
-  const addSurveyStub = mockAddSurvey();
-  const sut = new AddSurveyController(validationStub, addSurveyStub);
-  return { sut, validationStub, addSurveyStub };
+  const addSurveySpy = new AddSurveySpy();
+  const sut = new AddSurveyController(validationStub, addSurveySpy);
+  return { sut, validationStub, addSurveySpy };
 };
 
 describe('AddSurvey Controller', () => {
@@ -61,22 +61,18 @@ describe('AddSurvey Controller', () => {
   });
 
   it('should call AddSurvey with correct values', async () => {
-    const { sut, addSurveyStub } = makeSut();
-
-    const addSpy = jest.spyOn(addSurveyStub, 'add');
+    const { sut, addSurveySpy } = makeSut();
 
     const httpRequest = mockRequest();
     await sut.handle(httpRequest);
 
-    expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
+    expect(addSurveySpy.addSurveyParams).toEqual(httpRequest.body);
   });
 
   it('should return 500 if AddSurvey throws an exception', async () => {
-    const { sut, addSurveyStub } = makeSut();
+    const { sut, addSurveySpy } = makeSut();
 
-    jest
-      .spyOn(addSurveyStub, 'add')
-      .mockImplementationOnce(throwNullStackError);
+    jest.spyOn(addSurveySpy, 'add').mockImplementationOnce(throwNullStackError);
 
     const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
