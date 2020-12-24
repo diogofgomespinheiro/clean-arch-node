@@ -1,4 +1,4 @@
-import { HttpRequest, Validation } from './login-protocols';
+import { HttpRequest } from './login-protocols';
 import { LoginController } from './login-controller';
 import {
   badRequest,
@@ -9,7 +9,8 @@ import {
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { throwNullStackError } from '@/domain/test/test-helper';
 import { AuthenticationSpy } from '@/presentation/test';
-import { mockValidation } from '@/validation/test';
+import { ValidationSpy } from '@/validation/test';
+import faker from 'faker';
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -20,15 +21,15 @@ const mockRequest = (): HttpRequest => ({
 
 type SutTypes = {
   sut: LoginController;
-  validationStub: Validation;
+  validationSpy: ValidationSpy;
   authenticationSpy: AuthenticationSpy;
 };
 
 const makeSut = (): SutTypes => {
-  const validationStub = mockValidation();
+  const validationSpy = new ValidationSpy();
   const authenticationSpy = new AuthenticationSpy();
-  const sut = new LoginController(authenticationSpy, validationStub);
-  return { sut, validationStub, authenticationSpy };
+  const sut = new LoginController(authenticationSpy, validationSpy);
+  return { sut, validationSpy, authenticationSpy };
 };
 
 describe('Login Controller', () => {
@@ -69,27 +70,22 @@ describe('Login Controller', () => {
   });
 
   it('should call Validation with correct value', async () => {
-    const { sut, validationStub } = makeSut();
-
-    const validateSpy = jest.spyOn(validationStub, 'validate');
+    const { sut, validationSpy } = makeSut();
 
     const httpRequest = mockRequest();
 
     await sut.handle(httpRequest);
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+    expect(validationSpy.input).toEqual(httpRequest.body);
   });
 
   it('should return 400 if validation return an error', async () => {
-    const { sut, validationStub } = makeSut();
-    jest
-      .spyOn(validationStub, 'validate')
-      .mockReturnValueOnce(new MissingParamError('any_field'));
+    const { sut, validationSpy } = makeSut();
+    const field = faker.random.word();
+    validationSpy.error = new MissingParamError(field);
 
     const httpRequest = mockRequest();
 
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse).toEqual(
-      badRequest(new MissingParamError('any_field'))
-    );
+    expect(httpResponse).toEqual(badRequest(new MissingParamError(field)));
   });
 });

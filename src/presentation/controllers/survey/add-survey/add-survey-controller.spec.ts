@@ -5,10 +5,11 @@ import {
   noContent
 } from '@/presentation/helpers/http/http-helper';
 import { AddSurveyController } from './add-survey-controller';
-import { HttpRequest, Validation } from './add-survey-protocols';
+import { HttpRequest } from './add-survey-protocols';
 import { throwNullStackError } from '@/domain/test/test-helper';
-import { mockValidation } from '@/validation/test';
+import { ValidationSpy } from '@/validation/test';
 import { AddSurveySpy } from '@/presentation/test';
+import faker from 'faker';
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -25,39 +26,34 @@ const mockRequest = (): HttpRequest => ({
 
 type SutTypes = {
   sut: AddSurveyController;
-  validationStub: Validation;
+  validationSpy: ValidationSpy;
   addSurveySpy: AddSurveySpy;
 };
 
 const makeSut = (): SutTypes => {
-  const validationStub = mockValidation();
+  const validationSpy = new ValidationSpy();
   const addSurveySpy = new AddSurveySpy();
-  const sut = new AddSurveyController(validationStub, addSurveySpy);
-  return { sut, validationStub, addSurveySpy };
+  const sut = new AddSurveyController(validationSpy, addSurveySpy);
+  return { sut, validationSpy, addSurveySpy };
 };
 
 describe('AddSurvey Controller', () => {
   it('should call Validation with correct values', async () => {
-    const { sut, validationStub } = makeSut();
-
-    const validateSpy = jest.spyOn(validationStub, 'validate');
+    const { sut, validationSpy } = makeSut();
 
     const httpRequest = mockRequest();
     await sut.handle(httpRequest);
 
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
+    expect(validationSpy.input).toEqual(httpRequest.body);
   });
 
   it('should return 400 if validation returns an error', async () => {
-    const { sut, validationStub } = makeSut();
-    jest
-      .spyOn(validationStub, 'validate')
-      .mockReturnValueOnce(new MissingParamError('any_field'));
+    const { sut, validationSpy } = makeSut();
+    const field = faker.random.word();
+    validationSpy.error = new MissingParamError(field);
 
     const httpResponse = await sut.handle(mockRequest());
-    expect(httpResponse).toEqual(
-      badRequest(new MissingParamError('any_field'))
-    );
+    expect(httpResponse).toEqual(badRequest(new MissingParamError(field)));
   });
 
   it('should call AddSurvey with correct values', async () => {

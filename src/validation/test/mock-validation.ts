@@ -1,11 +1,11 @@
 import { CustomError, Validation } from '@/presentation/protocols';
 
-export const mockValidation = (): Validation => {
-  class ValidationStub implements Validation {
-    validate(data: any): CustomError {
-      return null;
-    }
-  }
+export class ValidationSpy implements Validation {
+  error: CustomError = null;
+  input: any;
 
-  return new ValidationStub();
-};
+  validate(input: any): CustomError {
+    this.input = input;
+    return this.error;
+  }
+}
