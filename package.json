@@ -9,6 +9,7 @@
   "scripts": {
     "clean": "del ./dist/*",
     "build": "npm run clean && babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored --source-maps",
+    "postbuild": "copyfiles -u 1 public/**/* dist/static",
     "build:watch": "babel --watch src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored --source-maps",
     "start": "node dist/main/server.js",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
@@ -64,6 +65,7 @@
     "@typescript-eslint/parser": "4.8.1",
     "babel-plugin-module-resolver": "^4.0.0",
     "commitizen": "4.2.2",
+    "copyfiles": "^2.4.1",
     "coveralls": "^3.1.0",
     "cz-conventional-changelog": "3.3.0",
     "del-cli": "^3.0.1",
