@@ -89,7 +89,7 @@ describe('SignUp Controller', () => {
     const httpRequest = mockRequest();
 
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse).toEqual(ok({ accessToken: authenticationSpy.token }));
+    expect(httpResponse).toEqual(ok(authenticationSpy.authenticationModel));
   });
 
   it('should call Validation with correct value', async () => {
