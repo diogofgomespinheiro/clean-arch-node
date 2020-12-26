@@ -14,8 +14,8 @@ import faker from 'faker';
 
 const mockRequest = (): HttpRequest => ({
   body: {
-    email: 'any_email@mail.com',
-    password: 'any_password'
+    email: faker.internet.email(),
+    password: faker.internet.password()
   }
 });
 

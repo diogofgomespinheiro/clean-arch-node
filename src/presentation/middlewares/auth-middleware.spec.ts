@@ -13,7 +13,7 @@ import faker from 'faker';
 const mockRequest = (): HttpRequest => {
   return {
     headers: {
-      'x-access-token': 'any_token'
+      'x-access-token': faker.random.uuid()
     }
   };
 };

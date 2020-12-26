@@ -8,11 +8,12 @@ import {
 } from '@/presentation/helpers/http/http-helper';
 import { InvalidParamError, ServerError } from '@/presentation/errors';
 import { throwNullStackError } from '@/domain/test/test-helper';
+import faker from 'faker';
 
 const mockRequest = (): HttpRequest => {
   return {
     params: {
-      surveyId: 'any_id'
+      surveyId: faker.random.uuid()
     }
   };
 };

@@ -13,14 +13,18 @@ import { AddAccountSpy, AuthenticationSpy } from '@/presentation/test';
 import { ValidationSpy } from '@/validation/test';
 import faker from 'faker';
 
-const mockRequest = (): HttpRequest => ({
-  body: {
-    name: 'any_name',
-    email: 'any_email@mail.com',
-    password: 'any_password',
-    passwordConfirmation: 'any_password'
-  }
-});
+const mockRequest = (): HttpRequest => {
+  const password = faker.internet.password();
+  return {
+    body: {
+      name: faker.name.findName(),
+      email: faker.internet.email(),
+      password,
+      passwordConfirmation: password
+    }
+  };
+};
+
 type SutTypes = {
   sut: SignUpController;
   addAccountSpy: AddAccountSpy;

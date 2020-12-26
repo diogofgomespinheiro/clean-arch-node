@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 import { LoadSurveyByIdRepositorySpy } from '@/data/test';
 import { throwError } from '@/domain/test/test-helper';
-import faker from 'faker';
 import { DbLoadSurveyById } from './db-load-survey-by-id';
+import faker from 'faker';
 
 type SutTypes = {
   sut: DbLoadSurveyById;

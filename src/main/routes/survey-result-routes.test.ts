@@ -6,13 +6,14 @@ import env from '@/main/config/env';
 import { hash } from 'bcrypt';
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import { SurveyModel } from '@/domain/models/survey';
+import faker from 'faker';
 
 const makeAccessToken = async (role?: string): Promise<string> => {
   const accountCollection = await MongoHelper.getCollection('accounts');
   const password = await hash('123456', env.defaultSalt);
   const res = await accountCollection.insertOne({
-    name: 'Diogo',
-    email: 'diogo@gmail.com',
+    name: faker.name.findName(),
+    email: faker.internet.email(),
     password,
     ...(role && { role })
   });
@@ -36,17 +37,17 @@ const makeAccessToken = async (role?: string): Promise<string> => {
 const makeSurvey = async (): Promise<SurveyModel> => {
   const surveyCollection = await MongoHelper.getCollection('surveys');
   const res = await surveyCollection.insertOne({
-    question: 'Question',
+    question: faker.random.words(),
     answers: [
       {
-        answer: 'Answer 1',
-        image: 'http://image-name.com'
+        answer: faker.random.word(),
+        image: faker.image.imageUrl()
       },
       {
-        answer: 'Answer 2'
+        answer: faker.random.word()
       }
     ],
-    date: new Date()
+    date: faker.date.recent()
   });
 
   return MongoHelper.map(res.ops[0]);
@@ -58,7 +59,7 @@ describe('Survey Results Routes', () => {
       await request(app)
         .put('/api/v1/surveys/any_id/results')
         .send({
-          answer: 'any_answer'
+          answer: faker.random.word()
         })
         .expect(403);
     });
@@ -71,7 +72,7 @@ describe('Survey Results Routes', () => {
         .put(`/api/v1/surveys/${survey.id}/results`)
         .set('x-access-token', accessToken)
         .send({
-          answer: 'Answer 1'
+          answer: survey.answers[0].answer
         })
         .expect(200);
     });

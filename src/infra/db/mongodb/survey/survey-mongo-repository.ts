@@ -11,9 +11,9 @@ export class SurveyMongoRepository
     AddSurveyRepository,
     LoadSurveysRepository,
     LoadSurveyByIdRepository {
-  async add(surveyData: AddSurveyParams): Promise<void> {
+  async add(data: AddSurveyParams): Promise<void> {
     const accountCollection = await MongoHelper.getCollection('surveys');
-    await accountCollection.insertOne(surveyData);
+    await accountCollection.insertOne(data);
   }
 
   async loadAll(): Promise<SurveyModel[]> {

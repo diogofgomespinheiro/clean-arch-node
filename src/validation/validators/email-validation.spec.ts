@@ -24,7 +24,7 @@ describe('Email Validation', () => {
     const { sut, emailValidatorSpy } = makeSut();
     emailValidatorSpy.isEmailValid = false;
 
-    const error = sut.validate({ email: 'any_email@mail.com' });
+    const error = sut.validate({ email: faker.internet.email() });
 
     expect(error).toEqual(new InvalidParamError('email'));
   });

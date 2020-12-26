@@ -11,7 +11,7 @@ const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository();
 };
 
-describe('Survey Mongo Repository', () => {
+describe('SurveyMongoRepository', () => {
   describe('add()', () => {
     it('should add a survey on success', async () => {
       const sut = makeSut();

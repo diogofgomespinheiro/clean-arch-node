@@ -5,13 +5,14 @@ import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import env from '@/main/config/env';
 import { hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
+import faker from 'faker';
 
 const makeAccessToken = async (role?: string): Promise<string> => {
   const accountCollection = await MongoHelper.getCollection('accounts');
   const password = await hash('123456', env.defaultSalt);
   const res = await accountCollection.insertOne({
-    name: 'Diogo',
-    email: 'diogo@gmail.com',
+    name: faker.name.findName(),
+    email: faker.internet.email(),
     password,
     ...(role && { role })
   });
@@ -38,14 +39,14 @@ describe('Survey Routes', () => {
       await request(app)
         .post('/api/v1/surveys')
         .send({
-          question: 'Question',
+          question: faker.random.words(),
           answers: [
             {
-              answer: 'Answer 1',
-              image: 'http://image-name.com'
+              answer: faker.random.word(),
+              image: faker.image.imageUrl()
             },
             {
-              answer: 'Answer 2'
+              answer: faker.random.word()
             }
           ]
         })
@@ -59,14 +60,14 @@ describe('Survey Routes', () => {
         .post('/api/v1/surveys')
         .set('x-access-token', accessToken)
         .send({
-          question: 'Question',
+          question: faker.random.words(),
           answers: [
             {
-              answer: 'Answer 1',
-              image: 'http://image-name.com'
+              answer: faker.random.word(),
+              image: faker.image.imageUrl()
             },
             {
-              answer: 'Answer 2'
+              answer: faker.random.word()
             }
           ]
         })
@@ -93,11 +94,11 @@ describe('Survey Routes', () => {
       const surveysCollection = await MongoHelper.getCollection('surveys');
 
       await surveysCollection.insertOne({
-        question: 'any_question',
+        question: faker.random.words(),
         answers: [
           {
-            image: 'any_image',
-            answer: 'any_answer'
+            image: faker.image.imageUrl(),
+            answer: faker.random.word()
           }
         ],
         date: new Date()

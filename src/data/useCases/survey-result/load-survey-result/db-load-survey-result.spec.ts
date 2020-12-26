@@ -2,7 +2,6 @@ import {
   LoadSurveyByIdRepositorySpy,
   LoadSurveyResultRepositorySpy
 } from '@/data/test';
-import { mockEmptySurveyResultModel } from '@/domain/test';
 import { throwError } from '@/domain/test/test-helper';
 import faker from 'faker';
 import { DbLoadSurveyResult } from './db-load-survey-result';
@@ -59,11 +58,27 @@ describe('DbLoadSurveyResult use case', () => {
   });
 
   it('should return a surveyResult with all answers with count 0 if LoadSurveyResultRepository returns null', async () => {
-    const { sut, loadSurveyResultRepositorySpy } = makeSut();
+    const {
+      sut,
+      loadSurveyResultRepositorySpy,
+      loadSurveyByIdRepositorySpy
+    } = makeSut();
     loadSurveyResultRepositorySpy.surveyResultModel = null;
 
     const surveyResult = await sut.load(surveyId);
-    expect(surveyResult).toEqual(mockEmptySurveyResultModel());
+    const { surveyModel } = loadSurveyByIdRepositorySpy;
+
+    expect(surveyResult).toEqual({
+      surveyId: surveyModel.id,
+      question: surveyModel.question,
+      date: surveyModel.date,
+      answers: surveyModel.answers.map(answer =>
+        Object.assign({}, answer, {
+          count: 0,
+          percent: 0
+        })
+      )
+    });
   });
 
   it('should return a surveyResult on success', async () => {
