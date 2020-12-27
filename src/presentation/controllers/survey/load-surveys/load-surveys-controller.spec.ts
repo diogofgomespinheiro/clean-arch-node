@@ -7,6 +7,10 @@ import {
 import { ServerError } from '@/presentation/errors';
 import { throwNullStackError } from '@/domain/test/test-helper';
 import { LoadSurveysSpy } from '@/presentation/test';
+import { HttpRequest } from './load-surveys-protocols';
+import faker from 'faker';
+
+const mockRequest = (): HttpRequest => ({ accountId: faker.random.uuid() });
 
 type SutTypes = {
   sut: LoadSurveysController;
@@ -23,15 +27,17 @@ const makeSut = (): SutTypes => {
 describe('LoadSurveys Controller', () => {
   it('should call LoadSurveys', async () => {
     const { sut, loadSurveysSpy } = makeSut();
+    const httpRequest = mockRequest();
 
-    await sut.handle({});
-    expect(loadSurveysSpy.callsCount).toBe(1);
+    await sut.handle(httpRequest);
+
+    expect(loadSurveysSpy.accountId).toBe(httpRequest.accountId);
   });
 
   it('should return 200 on success', async () => {
     const { sut, loadSurveysSpy } = makeSut();
 
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(ok(loadSurveysSpy.surveyModels));
   });
 
@@ -39,7 +45,7 @@ describe('LoadSurveys Controller', () => {
     const { sut, loadSurveysSpy } = makeSut();
     loadSurveysSpy.surveyModels = [];
 
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(noContent());
   });
 
@@ -50,7 +56,7 @@ describe('LoadSurveys Controller', () => {
       .spyOn(loadSurveysSpy, 'load')
       .mockImplementationOnce(throwNullStackError);
 
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 });
