@@ -92,6 +92,7 @@
     "express": "^4.17.1",
     "fast-glob": "^3.2.4",
     "jsonwebtoken": "^8.5.1",
+    "mongo-round": "^1.0.0",
     "mongodb": "3.6.3",
     "swagger-ui-express": "4.1.5",
     "validator": "^13.1.17"
