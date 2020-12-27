@@ -12,6 +12,7 @@ import faker from 'faker';
 
 const mockRequest = (): HttpRequest => {
   return {
+    accountId: faker.random.uuid(),
     params: {
       surveyId: faker.random.uuid()
     }
@@ -71,6 +72,7 @@ describe('LoadSurveyResult Controller', () => {
     await sut.handle(httpRequest);
 
     expect(loadSurveyResultSpy.surveyId).toBe(httpRequest.params.surveyId);
+    expect(loadSurveyResultSpy.accountId).toBe(httpRequest.accountId);
   });
 
   it('should return 500 if LoadSurveyResult throws', async () => {

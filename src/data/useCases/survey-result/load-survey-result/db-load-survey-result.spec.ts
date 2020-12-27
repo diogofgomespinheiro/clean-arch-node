@@ -23,16 +23,19 @@ const makeSut = (): SutTypes => {
 };
 
 let surveyId: string;
+let accountId: string;
 
 describe('DbLoadSurveyResult use case', () => {
   beforeEach(() => {
     surveyId = faker.random.uuid();
+    accountId = faker.random.uuid();
   });
 
-  it('should call LoadSurveyResultRepository with correct surveyId', async () => {
+  it('should call LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositorySpy } = makeSut();
-    await sut.load(surveyId);
+    await sut.load(surveyId, accountId);
     expect(loadSurveyResultRepositorySpy.surveyId).toBe(surveyId);
+    expect(loadSurveyResultRepositorySpy.accountId).toBe(accountId);
   });
 
   it('should throw if LoadSurveyResultRepository throws', async () => {
@@ -41,7 +44,7 @@ describe('DbLoadSurveyResult use case', () => {
       .spyOn(loadSurveyResultRepositorySpy, 'loadBySurveyId')
       .mockImplementationOnce(throwError);
 
-    const promise = sut.load(surveyId);
+    const promise = sut.load(surveyId, accountId);
     await expect(promise).rejects.toThrow();
   });
 
@@ -53,7 +56,7 @@ describe('DbLoadSurveyResult use case', () => {
     } = makeSut();
     loadSurveyResultRepositorySpy.surveyResultModel = null;
 
-    await sut.load(surveyId);
+    await sut.load(surveyId, accountId);
     expect(loadSurveyByIdRepositorySpy.surveyId).toBe(surveyId);
   });
 
@@ -65,7 +68,7 @@ describe('DbLoadSurveyResult use case', () => {
     } = makeSut();
     loadSurveyResultRepositorySpy.surveyResultModel = null;
 
-    const surveyResult = await sut.load(surveyId);
+    const surveyResult = await sut.load(surveyId, accountId);
     const { surveyModel } = loadSurveyByIdRepositorySpy;
 
     expect(surveyResult).toEqual({
@@ -75,7 +78,8 @@ describe('DbLoadSurveyResult use case', () => {
       answers: surveyModel.answers.map(answer =>
         Object.assign({}, answer, {
           count: 0,
-          percent: 0
+          percent: 0,
+          isCurrentAccountAnswer: false
         })
       )
     });
@@ -84,7 +88,7 @@ describe('DbLoadSurveyResult use case', () => {
   it('should return a surveyResult on success', async () => {
     const { sut, loadSurveyResultRepositorySpy } = makeSut();
 
-    const surveyResult = await sut.load(surveyId);
+    const surveyResult = await sut.load(surveyId, accountId);
     expect(surveyResult).toEqual(
       loadSurveyResultRepositorySpy.surveyResultModel
     );

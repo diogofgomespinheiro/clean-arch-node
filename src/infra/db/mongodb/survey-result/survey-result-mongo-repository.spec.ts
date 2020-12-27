@@ -95,28 +95,75 @@ describe('Survey Result Mongo Repository', () => {
     it('should load survey result', async () => {
       const survey = await makeSurvey();
       const account = await makeAccount();
+      const account2 = await makeAccount();
 
       await makeSurveyResult(mockSurveyResultParams(account, survey));
-      await makeSurveyResult(mockSurveyResultParams(account, survey));
-      await makeSurveyResult(mockSurveyResultParams(account, survey));
-      await makeSurveyResult(mockSurveyResultParams(account, survey, 1));
+      await makeSurveyResult(mockSurveyResultParams(account2, survey));
       const sut = makeSut();
 
-      const surveyResult = await sut.loadBySurveyId(survey.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, account.id);
 
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(survey.id);
-      expect(surveyResult.answers[0].count).toBe(3);
-      expect(surveyResult.answers[0].percent).toBe(75);
+      expect(surveyResult.answers[0].count).toBe(2);
+      expect(surveyResult.answers[0].percent).toBe(100);
+      expect(surveyResult.answers[0].isCurrentAccountAnswer).toBeTruthy();
+      expect(surveyResult.answers[1].count).toBe(0);
+      expect(surveyResult.answers[1].percent).toBe(0);
+      expect(surveyResult.answers[1].isCurrentAccountAnswer).toBeFalsy();
+    });
+
+    it('should load survey result v2', async () => {
+      const survey = await makeSurvey();
+      const account = await makeAccount();
+      const account2 = await makeAccount();
+      const account3 = await makeAccount();
+
+      await makeSurveyResult(mockSurveyResultParams(account, survey));
+      await makeSurveyResult(mockSurveyResultParams(account2, survey, 1));
+      await makeSurveyResult(mockSurveyResultParams(account3, survey, 1));
+      const sut = makeSut();
+
+      const surveyResult = await sut.loadBySurveyId(survey.id, account2.id);
+
+      expect(surveyResult).toBeTruthy();
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].count).toBe(2);
+      expect(surveyResult.answers[0].percent).toBe(67);
+      expect(surveyResult.answers[0].isCurrentAccountAnswer).toBeTruthy();
       expect(surveyResult.answers[1].count).toBe(1);
-      expect(surveyResult.answers[1].percent).toBe(25);
-      expect(surveyResult.answers.length).toBe(survey.answers.length);
+      expect(surveyResult.answers[1].percent).toBe(33);
+      expect(surveyResult.answers[1].isCurrentAccountAnswer).toBeFalsy();
+    });
+
+    it('should load survey result v3', async () => {
+      const survey = await makeSurvey();
+      const account = await makeAccount();
+      const account2 = await makeAccount();
+      const account3 = await makeAccount();
+
+      await makeSurveyResult(mockSurveyResultParams(account, survey));
+      await makeSurveyResult(mockSurveyResultParams(account3, survey, 1));
+      const sut = makeSut();
+
+      const surveyResult = await sut.loadBySurveyId(survey.id, account2.id);
+
+      expect(surveyResult).toBeTruthy();
+      expect(surveyResult.surveyId).toEqual(survey.id);
+      expect(surveyResult.answers[0].count).toBe(1);
+      expect(surveyResult.answers[0].percent).toBe(50);
+      expect(surveyResult.answers[0].isCurrentAccountAnswer).toBeFalsy();
+      expect(surveyResult.answers[1].count).toBe(1);
+      expect(surveyResult.answers[1].percent).toBe(50);
+      expect(surveyResult.answers[1].isCurrentAccountAnswer).toBeFalsy();
     });
 
     it('should return null if no surveyResult is found', async () => {
       const survey = await makeSurvey();
+      const account = await makeAccount();
+
       const sut = makeSut();
-      const surveyResult = await sut.loadBySurveyId(survey.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, account.id);
       expect(surveyResult).toBeNull();
     });
   });
