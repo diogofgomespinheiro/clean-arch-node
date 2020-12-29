@@ -1,4 +1,4 @@
-import { InvalidParamError } from './invalid-param-error';
+import { InvalidParamError } from '@/presentation/errors';
 
 describe('Invalid Param Error', () => {
   it('should serialize errors with correct structure', () => {
