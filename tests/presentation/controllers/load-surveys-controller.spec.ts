@@ -1,9 +1,5 @@
-import { LoadSurveysController } from '@/presentation/controllers/survey/load-surveys/load-surveys-controller';
-import {
-  noContent,
-  ok,
-  serverError
-} from '@/presentation/helpers/http/http-helper';
+import { LoadSurveysController } from '@/presentation/controllers';
+import { noContent, ok, serverError } from '@/presentation/helpers';
 import { ServerError } from '@/presentation/errors';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { LoadSurveysSpy } from '@/tests/presentation/mocks';

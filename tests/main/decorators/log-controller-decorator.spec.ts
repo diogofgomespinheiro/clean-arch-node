@@ -1,10 +1,10 @@
-import { ok, serverError } from '@/presentation/helpers/http/http-helper';
+import { ok, serverError } from '@/presentation/helpers';
 import {
   Controller,
   HttpRequest,
   HttpResponse
 } from '@/presentation/protocols';
-import { LogControllerDecorator } from '@/main/decorators/log/log-controller-decorator';
+import { LogControllerDecorator } from '@/main/decorators';
 import { mockAccountModel } from '@/tests/domain/mocks';
 import { LogErrorRepositorySpy } from '@/tests/data/mocks';
 import faker from 'faker';

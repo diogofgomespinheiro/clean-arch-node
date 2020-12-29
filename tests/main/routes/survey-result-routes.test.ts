@@ -3,10 +3,10 @@ import { sign } from 'jsonwebtoken';
 import { hash } from 'bcrypt';
 import faker from 'faker';
 
+import { SurveyModel } from '@/domain/models';
+import { MongoHelper } from '@/infra/db';
 import app from '@/main/config/app';
 import env from '@/main/config/env';
-import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
-import { SurveyModel } from '@/domain/models/survey';
 
 const makeAccessToken = async (role?: string): Promise<string> => {
   const accountCollection = await MongoHelper.getCollection('accounts');

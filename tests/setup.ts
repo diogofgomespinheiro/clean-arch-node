@@ -1,4 +1,4 @@
-import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
+import { MongoHelper } from '@/infra/db';
 import MockDate from 'mockdate';
 
 beforeAll(async () => {

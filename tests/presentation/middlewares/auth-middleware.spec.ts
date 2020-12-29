@@ -1,11 +1,7 @@
 import { AccessDeniedError, ServerError } from '@/presentation/errors';
-import {
-  forbidden,
-  ok,
-  serverError
-} from '@/presentation/helpers/http/http-helper';
+import { forbidden, ok, serverError } from '@/presentation/helpers';
 import { HttpRequest } from '@/presentation/protocols';
-import { AuthMiddleware } from '@/presentation/middlewares/auth-middleware';
+import { AuthMiddleware } from '@/presentation/middlewares';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { LoadAccountByTokenSpy } from '@/tests/presentation/mocks';
 import faker from 'faker';

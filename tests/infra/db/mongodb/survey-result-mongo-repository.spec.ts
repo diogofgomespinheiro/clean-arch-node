@@ -1,9 +1,6 @@
-import { SurveyResultMongoRepository } from '@/infra/db/mongodb/survey-result/survey-result-mongo-repository';
-import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
-import { SaveSurveyResultParams } from '@/domain/useCases/survey-result/save-survey-result';
-import { SurveyModel } from '@/domain/models/survey';
-import { AccountModel } from '@/domain/models/account';
-import { SurveyResultModel } from '@/domain/models/survey-result';
+import { SaveSurveyResultParams } from '@/domain/useCases';
+import { AccountModel, SurveyModel, SurveyResultModel } from '@/domain/models';
+import { SurveyResultMongoRepository, MongoHelper } from '@/infra/db';
 import {
   mockAddAccountParams,
   mockAddSurveyParams

@@ -1,13 +1,11 @@
-import { SignUpController } from '@/presentation/controllers/auth/signup/signup-controller';
-import { MissingParamError, ServerError } from '@/presentation/errors';
-import { HttpRequest } from '@/presentation/protocols';
+import { SignUpController } from '@/presentation/controllers';
 import {
-  badRequest,
-  forbidden,
-  ok,
-  serverError
-} from '@/presentation/helpers/http/http-helper';
-import { EmailInUseError } from '@/presentation/errors/email-in-use-error';
+  MissingParamError,
+  ServerError,
+  EmailInUseError
+} from '@/presentation/errors';
+import { HttpRequest } from '@/presentation/protocols';
+import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { AddAccountSpy, AuthenticationSpy } from '@/tests/presentation/mocks';
 import { ValidationSpy } from '@/tests/validation/mocks';

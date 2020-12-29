@@ -1,8 +1,8 @@
 import request from 'supertest';
 import { hash } from 'bcrypt';
 
+import { MongoHelper } from '@/infra/db';
 import app from '@/main/config/app';
-import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper';
 import env from '@/main/config/env';
 
 describe('Auth Routes', () => {

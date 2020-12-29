@@ -1,11 +1,11 @@
 import { HttpRequest } from '@/presentation/protocols';
-import { LoginController } from '@/presentation/controllers/auth/login/login-controller';
+import { LoginController } from '@/presentation/controllers';
 import {
   badRequest,
   serverError,
   unauthorized,
   ok
-} from '@/presentation/helpers/http/http-helper';
+} from '@/presentation/helpers';
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { AuthenticationSpy } from '@/tests/presentation/mocks';

@@ -1,10 +1,6 @@
 import { MissingParamError, ServerError } from '@/presentation/errors';
-import {
-  badRequest,
-  serverError,
-  noContent
-} from '@/presentation/helpers/http/http-helper';
-import { AddSurveyController } from '@/presentation/controllers/survey/add-survey/add-survey-controller';
+import { badRequest, serverError, noContent } from '@/presentation/helpers';
+import { AddSurveyController } from '@/presentation/controllers';
 import { HttpRequest } from '@/presentation/protocols';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { ValidationSpy } from '@/tests/validation/mocks';

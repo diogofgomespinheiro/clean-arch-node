@@ -1,10 +1,6 @@
 import { HttpRequest } from '@/presentation/protocols';
-import { SaveSurveyResultController } from '@/presentation/controllers/survey-result/save-survey-result/save-survey-result-controller';
-import {
-  forbidden,
-  ok,
-  serverError
-} from '@/presentation/helpers/http/http-helper';
+import { SaveSurveyResultController } from '@/presentation/controllers';
+import { forbidden, ok, serverError } from '@/presentation/helpers';
 import { InvalidParamError, ServerError } from '@/presentation/errors';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import {

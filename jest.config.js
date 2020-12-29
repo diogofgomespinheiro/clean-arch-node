@@ -4,10 +4,9 @@ const { compilerOptions } = require('./tsconfig.json');
 module.exports = {
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/index.ts',
     '!<rootDir>/src/main/**',
-    '!<rootDir>/src/**/*-protocols.ts',
-    '!**/protocols/**',
-    '!**/test/**'
+    '!**/protocols/**'
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'babel',
@@ -15,7 +14,7 @@ module.exports = {
     prefix: '<rootDir>'
   }),
   preset: '@shelf/jest-mongodb',
-  setupFilesAfterEnv: ['./src/test/setup.ts'],
+  setupFilesAfterEnv: ['./tests/setup.ts'],
   testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'

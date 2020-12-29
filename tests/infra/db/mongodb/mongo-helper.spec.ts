@@ -1,4 +1,4 @@
-import { MongoHelper as sut } from '@/infra/db/mongodb/helpers/mongo-helper';
+import { MongoHelper as sut } from '@/infra/db';
 
 describe('Mongo Helper', () => {
   it('should reconnect on getCollection if mongodb is down', async () => {
