@@ -15,7 +15,8 @@ export default {
   },
   servers: [
     {
-      url: '/api/v1'
+      url: '/api/v1',
+      description: 'Main Server'
     }
   ],
   tags: [

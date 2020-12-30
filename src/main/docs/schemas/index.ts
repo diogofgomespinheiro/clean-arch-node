@@ -7,4 +7,5 @@ export * from './save-survey-params-schema';
 export * from './signup-params-schema';
 export * from './survey-answer-schema';
 export * from './survey-result-schema';
+export * from './survey-result-answer-schema';
 export * from './survey-schema';
