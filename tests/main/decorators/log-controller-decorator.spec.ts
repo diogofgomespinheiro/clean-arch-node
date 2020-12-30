@@ -6,7 +6,7 @@ import {
 } from '@/presentation/protocols';
 import { LogControllerDecorator } from '@/main/decorators';
 import { mockAccountModel } from '@/tests/domain/mocks';
-import { LogErrorRepositorySpy } from '@/tests/data/mocks';
+import { LogErrorRepositorySpy } from '@/tests/data/mocks/mock-db-log';
 import faker from 'faker';
 
 class ControllerSpy implements Controller {
