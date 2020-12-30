@@ -1,6 +1,6 @@
 import { Authentication } from '@/domain/useCases';
 import { DbAuthentication } from '@/data/useCases';
-import { BcryptAdapter, JwtAdapter } from '@/infra/criptography';
+import { BcryptAdapter, JwtAdapter } from '@/infra/cryptography';
 import { AccountMongoRepository } from '@/infra/db';
 import env from '@/main/config/env';
 
