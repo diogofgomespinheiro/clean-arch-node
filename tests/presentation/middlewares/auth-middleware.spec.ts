@@ -1,18 +1,13 @@
 import { AccessDeniedError, ServerError } from '@/presentation/errors';
 import { forbidden, ok, serverError } from '@/presentation/helpers';
-import { HttpRequest } from '@/presentation/protocols';
 import { AuthMiddleware } from '@/presentation/middlewares';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { LoadAccountByTokenSpy } from '@/tests/presentation/mocks';
 import faker from 'faker';
 
-const mockRequest = (): HttpRequest => {
-  return {
-    headers: {
-      'x-access-token': faker.random.uuid()
-    }
-  };
-};
+const mockRequest = (): AuthMiddleware.Request => ({
+  accessToken: faker.random.uuid()
+});
 
 type SutTypes = {
   sut: AuthMiddleware;
@@ -38,12 +33,10 @@ describe('Auth Middleware', () => {
     const role = faker.random.word();
     const { sut, loadAccountByTokenSpy } = makeSut(role);
 
-    const httpRequest = mockRequest();
-    await sut.handle(httpRequest);
+    const request = mockRequest();
+    await sut.handle(request);
 
-    expect(loadAccountByTokenSpy.accessToken).toBe(
-      httpRequest.headers['x-access-token']
-    );
+    expect(loadAccountByTokenSpy.accessToken).toBe(request.accessToken);
     expect(loadAccountByTokenSpy.role).toBe(role);
   });
 

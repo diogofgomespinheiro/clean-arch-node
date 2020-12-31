@@ -1,4 +1,3 @@
-import { HttpRequest } from '@/presentation/protocols';
 import { LoginController } from '@/presentation/controllers';
 import {
   badRequest,
@@ -12,11 +11,9 @@ import { AuthenticationSpy } from '@/tests/presentation/mocks';
 import { ValidationSpy } from '@/tests/validation/mocks';
 import faker from 'faker';
 
-const mockRequest = (): HttpRequest => ({
-  body: {
-    email: faker.internet.email(),
-    password: faker.internet.password()
-  }
+const mockRequest = (): LoginController.Request => ({
+  email: faker.internet.email(),
+  password: faker.internet.password()
 });
 
 type SutTypes = {
@@ -35,11 +32,11 @@ const makeSut = (): SutTypes => {
 describe('Login Controller', () => {
   it('should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut();
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    await sut.handle(httpRequest);
+    await sut.handle(request);
 
-    const { email, password } = httpRequest.body;
+    const { email, password } = request;
     expect(authenticationSpy.authenticationParams).toEqual({ email, password });
   });
 
@@ -72,10 +69,10 @@ describe('Login Controller', () => {
   it('should call Validation with correct value', async () => {
     const { sut, validationSpy } = makeSut();
 
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    await sut.handle(httpRequest);
-    expect(validationSpy.input).toEqual(httpRequest.body);
+    await sut.handle(request);
+    expect(validationSpy.input).toEqual(request);
   });
 
   it('should return 400 if validation return an error', async () => {
@@ -83,9 +80,9 @@ describe('Login Controller', () => {
     const field = faker.random.word();
     validationSpy.error = new MissingParamError(field);
 
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(request);
     expect(httpResponse).toEqual(badRequest(new MissingParamError(field)));
   });
 });

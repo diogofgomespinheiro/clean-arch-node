@@ -4,22 +4,19 @@ import {
   ServerError,
   EmailInUseError
 } from '@/presentation/errors';
-import { HttpRequest } from '@/presentation/protocols';
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { AddAccountSpy, AuthenticationSpy } from '@/tests/presentation/mocks';
 import { ValidationSpy } from '@/tests/validation/mocks';
 import faker from 'faker';
 
-const mockRequest = (): HttpRequest => {
+const mockRequest = (): SignUpController.Request => {
   const password = faker.internet.password();
   return {
-    body: {
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-      password,
-      passwordConfirmation: password
-    }
+    name: faker.name.findName(),
+    email: faker.internet.email(),
+    password,
+    passwordConfirmation: password
   };
 };
 
@@ -51,13 +48,13 @@ const makeSut = (): SutTypes => {
 describe('SignUp Controller', () => {
   it('should call AddAccount with correct values', async () => {
     const { sut, addAccountSpy } = makeSut();
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    await sut.handle(httpRequest);
+    await sut.handle(request);
     expect(addAccountSpy.addAccountParams).toEqual({
-      name: httpRequest.body.name,
-      email: httpRequest.body.email,
-      password: httpRequest.body.password
+      name: request.name,
+      email: request.email,
+      password: request.password
     });
   });
 
@@ -68,9 +65,9 @@ describe('SignUp Controller', () => {
       .spyOn(addAccountSpy, 'add')
       .mockImplementationOnce(throwNullStackError);
 
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(request);
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 
@@ -84,19 +81,19 @@ describe('SignUp Controller', () => {
 
   it('should return 200 if valid data is provided', async () => {
     const { sut, authenticationSpy } = makeSut();
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(request);
     expect(httpResponse).toEqual(ok(authenticationSpy.authenticationModel));
   });
 
   it('should call Validation with correct value', async () => {
     const { sut, validationSpy } = makeSut();
 
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    await sut.handle(httpRequest);
-    expect(validationSpy.input).toEqual(httpRequest.body);
+    await sut.handle(request);
+    expect(validationSpy.input).toEqual(request);
   });
 
   it('should return 400 if validation return an error', async () => {
@@ -104,20 +101,20 @@ describe('SignUp Controller', () => {
     const field = faker.random.word();
     validationSpy.error = new MissingParamError(field);
 
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(request);
     expect(httpResponse).toEqual(badRequest(new MissingParamError(field)));
   });
 
   it('should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut();
 
-    const httpRequest = mockRequest();
+    const request = mockRequest();
 
-    await sut.handle(httpRequest);
+    await sut.handle(request);
 
-    const { email, password } = httpRequest.body;
+    const { email, password } = request;
     expect(authenticationSpy.authenticationParams).toEqual({ email, password });
   });
 

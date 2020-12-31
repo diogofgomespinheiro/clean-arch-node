@@ -1,8 +1,6 @@
-import {
-  HttpRequest,
-  HttpResponse,
-  Middleware
-} from '@/presentation/protocols';
+/* eslint-disable import/export */
+/* eslint-disable no-redeclare */
+import { HttpResponse, Middleware } from '@/presentation/protocols';
 import { LoadAccountByToken } from '@/domain/useCases';
 import { AccessDeniedError } from '@/presentation/errors';
 import { forbidden, ok, serverError } from '@/presentation/helpers';
@@ -13,9 +11,9 @@ export class AuthMiddleware implements Middleware {
     private readonly role?: string
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(request: AuthMiddleware.Request): Promise<HttpResponse> {
     try {
-      const accessToken = httpRequest.headers?.['x-access-token'];
+      const { accessToken } = request;
 
       if (!accessToken) return forbidden(new AccessDeniedError());
 
@@ -31,4 +29,10 @@ export class AuthMiddleware implements Middleware {
       return serverError(error);
     }
   }
+}
+
+export namespace AuthMiddleware {
+  export type Request = {
+    accessToken?: string;
+  };
 }

@@ -1,11 +1,8 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable import/export */
 import { badRequest, serverError, ok, forbidden } from '@/presentation/helpers';
 import { EmailInUseError } from '@/presentation/errors';
-import {
-  Controller,
-  HttpRequest,
-  HttpResponse,
-  Validation
-} from '@/presentation/protocols';
+import { Controller, HttpResponse, Validation } from '@/presentation/protocols';
 import { AddAccount, Authentication } from '@/domain/useCases';
 
 export class SignUpController implements Controller {
@@ -15,15 +12,15 @@ export class SignUpController implements Controller {
     private readonly authentication: Authentication
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(request: SignUpController.Request): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body);
+      const error = this.validation.validate(request);
 
       if (error) {
         return badRequest(error);
       }
 
-      const { name, email, password } = httpRequest.body;
+      const { name, email, password } = request;
 
       const account = await this.addAccount.add({
         name,
@@ -45,4 +42,13 @@ export class SignUpController implements Controller {
       return serverError(error);
     }
   }
+}
+
+export namespace SignUpController {
+  export type Request = {
+    name: string;
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+  };
 }

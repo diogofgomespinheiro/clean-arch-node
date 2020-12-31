@@ -1,23 +1,19 @@
 import { MissingParamError, ServerError } from '@/presentation/errors';
 import { badRequest, serverError, noContent } from '@/presentation/helpers';
 import { AddSurveyController } from '@/presentation/controllers';
-import { HttpRequest } from '@/presentation/protocols';
 import { throwNullStackError } from '@/tests/domain/mocks';
 import { ValidationSpy } from '@/tests/validation/mocks';
 import { AddSurveySpy } from '@/tests/presentation/mocks';
 import faker from 'faker';
 
-const mockRequest = (): HttpRequest => ({
-  body: {
-    question: faker.random.words(),
-    answers: [
-      {
-        image: faker.image.imageUrl(),
-        answer: faker.random.word()
-      }
-    ],
-    date: new Date()
-  }
+const mockRequest = (): AddSurveyController.Request => ({
+  question: faker.random.words(),
+  answers: [
+    {
+      image: faker.image.imageUrl(),
+      answer: faker.random.word()
+    }
+  ]
 });
 
 type SutTypes = {
@@ -37,10 +33,10 @@ describe('AddSurvey Controller', () => {
   it('should call Validation with correct values', async () => {
     const { sut, validationSpy } = makeSut();
 
-    const httpRequest = mockRequest();
-    await sut.handle(httpRequest);
+    const request = mockRequest();
+    await sut.handle(request);
 
-    expect(validationSpy.input).toEqual(httpRequest.body);
+    expect(validationSpy.input).toEqual(request);
   });
 
   it('should return 400 if validation returns an error', async () => {
@@ -55,10 +51,13 @@ describe('AddSurvey Controller', () => {
   it('should call AddSurvey with correct values', async () => {
     const { sut, addSurveySpy } = makeSut();
 
-    const httpRequest = mockRequest();
-    await sut.handle(httpRequest);
+    const request = mockRequest();
+    await sut.handle(request);
 
-    expect(addSurveySpy.addSurveyParams).toEqual(httpRequest.body);
+    expect(addSurveySpy.addSurveyParams).toEqual({
+      ...request,
+      date: new Date()
+    });
   });
 
   it('should return 500 if AddSurvey throws an exception', async () => {

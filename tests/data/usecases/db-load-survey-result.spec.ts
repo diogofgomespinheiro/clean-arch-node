@@ -75,13 +75,12 @@ describe('DbLoadSurveyResult use case', () => {
       surveyId: surveyModel.id,
       question: surveyModel.question,
       date: surveyModel.date,
-      answers: surveyModel.answers.map(answer =>
-        Object.assign({}, answer, {
-          count: 0,
-          percent: 0,
-          isCurrentAccountAnswer: false
-        })
-      )
+      answers: surveyModel.answers.map(answer => ({
+        ...answer,
+        count: 0,
+        percent: 0,
+        isCurrentAccountAnswer: false
+      }))
     });
   });
 
