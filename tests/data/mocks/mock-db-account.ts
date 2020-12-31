@@ -1,5 +1,4 @@
 import { AccountModel } from '@/domain/models';
-import { AddAccountParams } from '@/domain/useCases';
 import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
@@ -10,9 +9,11 @@ import { mockAccountModel } from '@/tests/domain/mocks';
 
 export class AddAccountRepositorySpy implements AddAccountRepository {
   accountModel = mockAccountModel();
-  addAccountParams: AddAccountParams;
+  addAccountParams: AddAccountRepository.Params;
 
-  async add(data: AddAccountParams): Promise<AccountModel> {
+  async add(
+    data: AddAccountRepository.Params
+  ): Promise<AddAccountRepository.Result> {
     this.addAccountParams = data;
     return this.accountModel;
   }
