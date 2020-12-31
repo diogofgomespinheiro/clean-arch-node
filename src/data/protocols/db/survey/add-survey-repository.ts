@@ -1,5 +1,10 @@
-import { AddSurveyParams } from '@/domain/useCases';
+import { AddSurvey } from '@/domain/useCases';
 
 export interface AddSurveyRepository {
-  add(data: AddSurveyParams): Promise<void>;
+  add(data: AddSurveyRepository.Params): Promise<void>;
+}
+
+// eslint-disable-next-line no-redeclare
+export namespace AddSurveyRepository {
+  export type Params = AddSurvey.Params;
 }
