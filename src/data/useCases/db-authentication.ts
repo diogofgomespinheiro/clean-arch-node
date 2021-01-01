@@ -1,6 +1,4 @@
-import { AuthenticationModel } from '@/domain/models';
-import { Authentication, AuthenticationParams } from '@/domain/useCases';
-
+import { Authentication } from '@/domain/useCases';
 import {
   HashComparer,
   LoadAccountByEmailRepository,
@@ -17,8 +15,8 @@ export class DbAuthentication implements Authentication {
   ) {}
 
   async auth(
-    authenticationParams: AuthenticationParams
-  ): Promise<AuthenticationModel> {
+    authenticationParams: Authentication.Params
+  ): Promise<Authentication.Result> {
     const account = await this.loadAccountByEmailRepository.loadByEmail(
       authenticationParams.email
     );
