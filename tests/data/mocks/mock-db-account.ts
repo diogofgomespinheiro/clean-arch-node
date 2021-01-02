@@ -2,7 +2,8 @@ import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
   LoadAccountByTokenRepository,
-  UpdateAccessTokenRepository
+  UpdateAccessTokenRepository,
+  VerifyAccountByEmailRepository
 } from '@/data/protocols/db';
 import { mockAccountModel } from '@/tests/domain/mocks';
 
@@ -55,5 +56,18 @@ export class UpdateAccessTokenRepositorySpy
   async updateAccessToken(id: string, token: string): Promise<void> {
     this.id = id;
     this.token = token;
+  }
+}
+
+export class VerifyAccountByEmailRepositorySpy
+  implements VerifyAccountByEmailRepository {
+  exists = false;
+  email: string;
+
+  async verifyByEmail(
+    email: string
+  ): Promise<VerifyAccountByEmailRepository.Result> {
+    this.email = email;
+    return this.exists;
   }
 }
