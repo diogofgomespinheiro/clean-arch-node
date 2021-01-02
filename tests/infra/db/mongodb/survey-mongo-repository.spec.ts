@@ -4,6 +4,7 @@ import {
   mockAddSurveyParams
 } from '@/tests/domain/mocks';
 import { Collection } from 'mongodb';
+import FakeObjectId from 'bson-objectid';
 
 let accountCollection: Collection;
 let surveyCollection: Collection;
@@ -86,6 +87,23 @@ describe('SurveyMongoRepository', () => {
       const survey = await sut.loadById(id);
       expect(survey).toBeTruthy();
       expect(survey.id).toBeTruthy();
+    });
+  });
+
+  describe('verifyById', () => {
+    it('should return true if survey exists', async () => {
+      const res = await surveyCollection.insertOne(mockAddSurveyParams());
+
+      const id = res.ops[0]._id;
+      const sut = makeSut();
+      const exists = await sut.verifyById(id);
+      expect(exists).toBe(true);
+    });
+
+    it('should return false if survey exists', async () => {
+      const sut = makeSut();
+      const exists = await sut.verifyById(FakeObjectId.generate());
+      expect(exists).toBe(false);
     });
   });
 });

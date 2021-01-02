@@ -1,13 +1,13 @@
 /* eslint-disable no-redeclare */
 /* eslint-disable import/export */
-import { LoadSurveyById, LoadSurveyResult } from '@/domain/useCases';
+import { LoadSurveyResult, VerifySurveyById } from '@/domain/useCases';
 import { InvalidParamError } from '@/presentation/errors';
 import { forbidden, ok, serverError } from '@/presentation/helpers';
 import { Controller, HttpResponse } from '@/presentation/protocols';
 
 export class LoadSurveyResultController implements Controller {
   constructor(
-    private readonly loadSurveyById: LoadSurveyById,
+    private readonly verifySurveyById: VerifySurveyById,
     private readonly loadSurveyResult: LoadSurveyResult
   ) {}
 
@@ -17,8 +17,8 @@ export class LoadSurveyResultController implements Controller {
     try {
       const { surveyId, accountId } = request;
 
-      const survey = await this.loadSurveyById.loadById(surveyId);
-      if (!survey) return forbidden(new InvalidParamError('surveyId'));
+      const exists = await this.verifySurveyById.verifyById(surveyId);
+      if (!exists) return forbidden(new InvalidParamError('surveyId'));
 
       const surveyResult = await this.loadSurveyResult.load(
         surveyId,

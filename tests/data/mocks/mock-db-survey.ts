@@ -2,7 +2,8 @@ import { SurveyModel } from '@/domain/models';
 import {
   AddSurveyRepository,
   LoadSurveyByIdRepository,
-  LoadSurveysRepository
+  LoadSurveysRepository,
+  VerifySurveyByIdRepository
 } from '@/data/protocols/db';
 import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks';
 
@@ -32,5 +33,16 @@ export class LoadSurveysRepositorySpy implements LoadSurveysRepository {
   async loadAll(accountId: string): Promise<SurveyModel[]> {
     this.accountId = accountId;
     return this.surveyModels;
+  }
+}
+
+export class VerifySurveyByIdRepositorySpy
+  implements VerifySurveyByIdRepository {
+  result = true;
+  surveyId: string;
+
+  async verifyById(id: string): Promise<VerifySurveyByIdRepository.Result> {
+    this.surveyId = id;
+    return this.result;
   }
 }
