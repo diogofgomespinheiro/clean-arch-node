@@ -4,5 +4,10 @@ export interface LoadSurveyResultRepository {
   loadBySurveyId(
     surveyId: string,
     accountId: string
-  ): Promise<SurveyResultModel>;
+  ): Promise<LoadSurveyResultRepository.Result>;
+}
+
+// eslint-disable-next-line no-redeclare
+export namespace LoadSurveyResultRepository {
+  export type Result = SurveyResultModel;
 }

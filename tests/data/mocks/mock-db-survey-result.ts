@@ -2,7 +2,6 @@ import {
   SaveSurveyResultRepository,
   LoadSurveyResultRepository
 } from '@/data/protocols/db';
-import { SurveyResultModel } from '@/domain/models/';
 import { SaveSurveyResultParams } from '@/domain/useCases';
 import { mockSurveyResultModel } from '@/tests/domain/mocks';
 
@@ -24,7 +23,7 @@ export class LoadSurveyResultRepositorySpy
   async loadBySurveyId(
     surveyId: string,
     accountId: string
-  ): Promise<SurveyResultModel> {
+  ): Promise<LoadSurveyResultRepository.Result> {
     this.surveyId = surveyId;
     this.accountId = accountId;
     return this.surveyResultModel;

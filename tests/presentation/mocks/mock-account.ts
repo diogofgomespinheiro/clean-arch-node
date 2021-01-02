@@ -1,4 +1,3 @@
-import { AccountModel } from '@/domain/models';
 import {
   AddAccount,
   Authentication,
@@ -37,7 +36,10 @@ export class LoadAccountByTokenSpy implements LoadAccountByToken {
   accessToken: string;
   role: string;
 
-  async load(accessToken: string, role?: string): Promise<AccountModel> {
+  async load(
+    accessToken: string,
+    role?: string
+  ): Promise<LoadAccountByToken.Result> {
     this.accessToken = accessToken;
     this.role = role;
     return this.accountModel;

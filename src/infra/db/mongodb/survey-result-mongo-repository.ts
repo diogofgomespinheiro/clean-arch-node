@@ -2,7 +2,6 @@ import {
   LoadSurveyResultRepository,
   SaveSurveyResultRepository
 } from '@/data/protocols';
-import { SurveyResultModel } from '@/domain/models';
 import { SaveSurveyResultParams } from '@/domain/useCases';
 import { MongoHelper, QueryBuilder } from '@/infra/db';
 import { ObjectId } from 'mongodb';
@@ -36,7 +35,7 @@ export class SurveyResultMongoRepository
   async loadBySurveyId(
     surveyId: string,
     accountId: string
-  ): Promise<SurveyResultModel> {
+  ): Promise<LoadSurveyResultRepository.Result> {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults'
     );
