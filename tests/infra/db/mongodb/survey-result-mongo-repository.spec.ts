@@ -1,4 +1,4 @@
-import { SaveSurveyResultParams } from '@/domain/useCases';
+import { SaveSurveyResultRepository } from '@/data/protocols';
 import { SurveyModel, SurveyResultModel } from '@/domain/models';
 import { SurveyResultMongoRepository, MongoHelper } from '@/infra/db';
 import {
@@ -11,7 +11,7 @@ const mockSurveyResultParams = (
   accountId: string,
   survey: SurveyModel,
   answerIndex = 0
-): SaveSurveyResultParams => ({
+): SaveSurveyResultRepository.Params => ({
   surveyId: survey.id,
   accountId,
   answer: survey.answers[answerIndex].answer,
@@ -48,7 +48,7 @@ const findSurveyResults = async (
 };
 
 const makeSurveyResult = async (
-  data: SaveSurveyResultParams
+  data: SaveSurveyResultRepository.Params
 ): Promise<void> => {
   const surveyResultCollection = await MongoHelper.getCollection(
     'surveyResults'

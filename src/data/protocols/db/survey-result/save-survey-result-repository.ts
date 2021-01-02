@@ -1,5 +1,10 @@
-import { SaveSurveyResultParams } from '@/domain/useCases';
+import { SaveSurveyResult } from '@/domain/useCases';
 
 export interface SaveSurveyResultRepository {
-  save(data: SaveSurveyResultParams): Promise<void>;
+  save(data: SaveSurveyResultRepository.Params): Promise<void>;
+}
+
+// eslint-disable-next-line no-redeclare
+export namespace SaveSurveyResultRepository {
+  export type Params = SaveSurveyResult.Params;
 }

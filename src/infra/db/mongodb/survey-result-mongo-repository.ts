@@ -2,14 +2,13 @@ import {
   LoadSurveyResultRepository,
   SaveSurveyResultRepository
 } from '@/data/protocols';
-import { SaveSurveyResultParams } from '@/domain/useCases';
 import { MongoHelper, QueryBuilder } from '@/infra/db';
 import { ObjectId } from 'mongodb';
 import round from 'mongo-round';
 
 export class SurveyResultMongoRepository
   implements SaveSurveyResultRepository, LoadSurveyResultRepository {
-  async save(data: SaveSurveyResultParams): Promise<void> {
+  async save(data: SaveSurveyResultRepository.Params): Promise<void> {
     const surveyResultCollection = await MongoHelper.getCollection(
       'surveyResults'
     );
