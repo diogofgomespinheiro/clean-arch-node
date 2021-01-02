@@ -1,5 +1,5 @@
 import { SaveSurveyResultParams } from '@/domain/useCases';
-import { AccountModel, SurveyModel, SurveyResultModel } from '@/domain/models';
+import { SurveyModel, SurveyResultModel } from '@/domain/models';
 import { SurveyResultMongoRepository, MongoHelper } from '@/infra/db';
 import {
   mockAddAccountParams,
@@ -8,12 +8,12 @@ import {
 import { ObjectId } from 'mongodb';
 
 const mockSurveyResultParams = (
-  account: AccountModel,
+  accountId: string,
   survey: SurveyModel,
   answerIndex = 0
 ): SaveSurveyResultParams => ({
   surveyId: survey.id,
-  accountId: account.id,
+  accountId,
   answer: survey.answers[answerIndex].answer,
   date: new Date()
 });
@@ -24,10 +24,10 @@ const makeSurvey = async (): Promise<SurveyModel> => {
   return MongoHelper.map(res.ops[0]);
 };
 
-const makeAccount = async (): Promise<AccountModel> => {
+const mockAccountId = async (): Promise<string> => {
   const accountCollection = await MongoHelper.getCollection('accounts');
   const res = await accountCollection.insertOne(mockAddAccountParams());
-  return MongoHelper.map(res.ops[0]);
+  return res.ops[0]._id;
 };
 
 const findSurveyResults = async (
@@ -68,23 +68,23 @@ describe('Survey Result Mongo Repository', () => {
   describe('save()', () => {
     it('should add a survey result if it`s new', async () => {
       const survey = await makeSurvey();
-      const account = await makeAccount();
+      const accountId = await mockAccountId();
       const sut = makeSut();
 
-      await sut.save(mockSurveyResultParams(account, survey));
-      const surveyResults = await findSurveyResults(survey.id, account.id);
+      await sut.save(mockSurveyResultParams(accountId, survey));
+      const surveyResults = await findSurveyResults(survey.id, accountId);
       expect(surveyResults).toBeTruthy();
     });
 
     it('should update a survey result if it`s not new', async () => {
       const survey = await makeSurvey();
-      const account = await makeAccount();
+      const accountId = await mockAccountId();
 
-      await makeSurveyResult(mockSurveyResultParams(account, survey));
+      await makeSurveyResult(mockSurveyResultParams(accountId, survey));
       const sut = makeSut();
 
-      await sut.save(mockSurveyResultParams(account, survey, 1));
-      const surveyResults = await findSurveyResults(survey.id, account.id);
+      await sut.save(mockSurveyResultParams(accountId, survey, 1));
+      const surveyResults = await findSurveyResults(survey.id, accountId);
 
       expect(surveyResults).toBeTruthy();
       expect(surveyResults.length).toBe(1);
@@ -94,14 +94,14 @@ describe('Survey Result Mongo Repository', () => {
   describe('loadBySurveyId', () => {
     it('should load survey result', async () => {
       const survey = await makeSurvey();
-      const account = await makeAccount();
-      const account2 = await makeAccount();
+      const accountId = await mockAccountId();
+      const accountId2 = await mockAccountId();
 
-      await makeSurveyResult(mockSurveyResultParams(account, survey));
-      await makeSurveyResult(mockSurveyResultParams(account2, survey));
+      await makeSurveyResult(mockSurveyResultParams(accountId, survey));
+      await makeSurveyResult(mockSurveyResultParams(accountId2, survey));
       const sut = makeSut();
 
-      const surveyResult = await sut.loadBySurveyId(survey.id, account.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId);
 
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(survey.id);
@@ -115,16 +115,16 @@ describe('Survey Result Mongo Repository', () => {
 
     it('should load survey result v2', async () => {
       const survey = await makeSurvey();
-      const account = await makeAccount();
-      const account2 = await makeAccount();
-      const account3 = await makeAccount();
+      const accountId = await mockAccountId();
+      const accountId2 = await mockAccountId();
+      const accountId3 = await mockAccountId();
 
-      await makeSurveyResult(mockSurveyResultParams(account, survey));
-      await makeSurveyResult(mockSurveyResultParams(account2, survey, 1));
-      await makeSurveyResult(mockSurveyResultParams(account3, survey, 1));
+      await makeSurveyResult(mockSurveyResultParams(accountId, survey));
+      await makeSurveyResult(mockSurveyResultParams(accountId2, survey, 1));
+      await makeSurveyResult(mockSurveyResultParams(accountId3, survey, 1));
       const sut = makeSut();
 
-      const surveyResult = await sut.loadBySurveyId(survey.id, account2.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId2);
 
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(survey.id);
@@ -138,15 +138,15 @@ describe('Survey Result Mongo Repository', () => {
 
     it('should load survey result v3', async () => {
       const survey = await makeSurvey();
-      const account = await makeAccount();
-      const account2 = await makeAccount();
-      const account3 = await makeAccount();
+      const accountId = await mockAccountId();
+      const accountId2 = await mockAccountId();
+      const accountId3 = await mockAccountId();
 
-      await makeSurveyResult(mockSurveyResultParams(account, survey));
-      await makeSurveyResult(mockSurveyResultParams(account3, survey, 1));
+      await makeSurveyResult(mockSurveyResultParams(accountId, survey));
+      await makeSurveyResult(mockSurveyResultParams(accountId3, survey, 1));
       const sut = makeSut();
 
-      const surveyResult = await sut.loadBySurveyId(survey.id, account2.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId2);
 
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(survey.id);
@@ -160,10 +160,10 @@ describe('Survey Result Mongo Repository', () => {
 
     it('should return null if no surveyResult is found', async () => {
       const survey = await makeSurvey();
-      const account = await makeAccount();
+      const accountId = await mockAccountId();
 
       const sut = makeSut();
-      const surveyResult = await sut.loadBySurveyId(survey.id, account.id);
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId);
       expect(surveyResult).toBeNull();
     });
   });

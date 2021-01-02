@@ -1,4 +1,3 @@
-import { AccountModel } from '@/domain/models';
 import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
@@ -24,7 +23,9 @@ export class LoadAccountByEmailRepositorySpy
   accountModel = mockAccountModel();
   email: string;
 
-  async loadByEmail(email: string): Promise<AccountModel> {
+  async loadByEmail(
+    email: string
+  ): Promise<LoadAccountByEmailRepository.Result> {
     this.email = email;
     return this.accountModel;
   }

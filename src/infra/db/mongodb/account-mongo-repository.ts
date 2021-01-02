@@ -1,4 +1,3 @@
-import { AccountModel } from '@/domain/models';
 import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
@@ -23,7 +22,9 @@ export class AccountMongoRepository
     return MongoHelper.map(result.ops[0]);
   }
 
-  async loadByEmail(email: string): Promise<AccountModel> {
+  async loadByEmail(
+    email: string
+  ): Promise<LoadAccountByEmailRepository.Result> {
     const accountCollection = await MongoHelper.getCollection('accounts');
 
     const account = await accountCollection.findOne({ email });
