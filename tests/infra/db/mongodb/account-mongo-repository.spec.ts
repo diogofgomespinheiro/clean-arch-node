@@ -155,4 +155,23 @@ describe('Account Mongo Repository', () => {
       expect(account).toBeNull();
     });
   });
+
+  describe('verifyByEmail()', () => {
+    it('should return true if email exists', async () => {
+      const sut = makeSut();
+
+      const addAccountParams = mockAddAccountParams();
+      const accountCollection = await makeAccountCollection();
+      await accountCollection.insertOne(addAccountParams);
+
+      const exists = await sut.verifyByEmail(addAccountParams.email);
+      expect(exists).toBe(true);
+    });
+
+    it('should return false if email doesn`t exist', async () => {
+      const sut = makeSut();
+      const exists = await sut.verifyByEmail(faker.internet.email());
+      expect(exists).toBe(false);
+    });
+  });
 });
