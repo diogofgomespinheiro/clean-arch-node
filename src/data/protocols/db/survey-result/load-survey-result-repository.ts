@@ -8,6 +8,6 @@ export interface LoadSurveyResultRepository {
 }
 
 // eslint-disable-next-line no-redeclare
-export namespace LoadSurveyResultRepository {
+export declare namespace LoadSurveyResultRepository {
   export type Result = SurveyResultModel;
 }

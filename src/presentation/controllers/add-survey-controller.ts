@@ -33,7 +33,7 @@ export class AddSurveyController implements Controller {
   }
 }
 
-export namespace AddSurveyController {
+export declare namespace AddSurveyController {
   type Answer = {
     image?: string;
     answer: string;

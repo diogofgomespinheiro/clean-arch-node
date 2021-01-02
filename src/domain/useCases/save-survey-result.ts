@@ -5,7 +5,7 @@ export interface SaveSurveyResult {
 }
 
 // eslint-disable-next-line no-redeclare
-export namespace SaveSurveyResult {
+export declare namespace SaveSurveyResult {
   export type Params = {
     surveyId: string;
     accountId: string;

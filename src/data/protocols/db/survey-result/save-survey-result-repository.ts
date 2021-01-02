@@ -5,6 +5,6 @@ export interface SaveSurveyResultRepository {
 }
 
 // eslint-disable-next-line no-redeclare
-export namespace SaveSurveyResultRepository {
+export declare namespace SaveSurveyResultRepository {
   export type Params = SaveSurveyResult.Params;
 }

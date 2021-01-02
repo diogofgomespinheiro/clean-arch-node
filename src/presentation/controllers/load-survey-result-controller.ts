@@ -32,7 +32,7 @@ export class LoadSurveyResultController implements Controller {
   }
 }
 
-export namespace LoadSurveyResultController {
+export declare namespace LoadSurveyResultController {
   export type Request = {
     surveyId: string;
     accountId: string;

@@ -44,7 +44,7 @@ export class SignUpController implements Controller {
   }
 }
 
-export namespace SignUpController {
+export declare namespace SignUpController {
   export type Request = {
     name: string;
     email: string;

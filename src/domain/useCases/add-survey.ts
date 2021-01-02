@@ -5,6 +5,6 @@ export interface AddSurvey {
 }
 
 // eslint-disable-next-line no-redeclare
-export namespace AddSurvey {
+export declare namespace AddSurvey {
   export type Params = Omit<SurveyModel, 'id'>;
 }

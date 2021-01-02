@@ -41,7 +41,7 @@ export class LoginController implements Controller {
   }
 }
 
-export namespace LoginController {
+export declare namespace LoginController {
   export type Request = {
     email: string;
     password: string;

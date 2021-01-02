@@ -38,7 +38,7 @@ export class SaveSurveyResultController implements Controller {
   }
 }
 
-export namespace SaveSurveyResultController {
+export declare namespace SaveSurveyResultController {
   export type Request = {
     accountId: string;
     surveyId: string;

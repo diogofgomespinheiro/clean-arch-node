@@ -5,6 +5,6 @@ export interface LoadAccountByToken {
   load(accessToken: string, role?: string): Promise<LoadAccountByToken.Result>;
 }
 
-export namespace LoadAccountByToken {
+export declare namespace LoadAccountByToken {
   export type Result = AccountModel;
 }

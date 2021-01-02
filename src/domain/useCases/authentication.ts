@@ -6,7 +6,7 @@ export interface Authentication {
   ): Promise<Authentication.Result>;
 }
 
-export namespace Authentication {
+export declare namespace Authentication {
   export type Params = {
     email: string;
     password: string;

@@ -5,7 +5,7 @@ export interface AddAccountRepository {
 }
 
 // eslint-disable-next-line no-redeclare
-export namespace AddAccountRepository {
+export declare namespace AddAccountRepository {
   export type Params = AddAccount.Params;
   export type Result = AddAccount.Result;
 }

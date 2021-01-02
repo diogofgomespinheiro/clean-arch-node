@@ -4,7 +4,7 @@ export interface AddAccount {
 }
 
 // eslint-disable-next-line no-redeclare
-export namespace AddAccount {
+export declare namespace AddAccount {
   export type Params = {
     name: string;
     email: string;

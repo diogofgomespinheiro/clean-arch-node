@@ -8,6 +8,6 @@ export interface LoadAccountByTokenRepository {
   ): Promise<LoadAccountByTokenRepository.Result>;
 }
 
-export namespace LoadAccountByTokenRepository {
+export declare namespace LoadAccountByTokenRepository {
   export type Result = AccountModel;
 }

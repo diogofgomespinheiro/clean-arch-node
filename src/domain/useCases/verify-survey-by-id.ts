@@ -3,6 +3,6 @@ export interface VerifySurveyById {
 }
 
 // eslint-disable-next-line no-redeclare
-export namespace VerifySurveyById {
+export declare namespace VerifySurveyById {
   export type Result = boolean;
 }

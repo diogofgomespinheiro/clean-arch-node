@@ -3,6 +3,6 @@ export interface VerifyAccountByEmailRepository {
   verifyByEmail(email: string): Promise<VerifyAccountByEmailRepository.Result>;
 }
 
-export namespace VerifyAccountByEmailRepository {
+export declare namespace VerifyAccountByEmailRepository {
   export type Result = boolean;
 }
