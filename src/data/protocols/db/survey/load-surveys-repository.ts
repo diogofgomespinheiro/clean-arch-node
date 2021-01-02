@@ -1,5 +1,10 @@
 import { SurveyModel } from '@/domain/models';
 
 export interface LoadSurveysRepository {
-  loadAll(accountId: string): Promise<SurveyModel[]>;
+  loadAll(accountId: string): Promise<LoadSurveysRepository.Result>;
+}
+
+// eslint-disable-next-line no-redeclare
+export namespace LoadSurveysRepository {
+  export type Result = SurveyModel[];
 }
