@@ -6,14 +6,17 @@ import typeDefs from '@/main/graphql/type-defs';
 import resolvers from '@/main/graphql/resolvers';
 
 const handleErrors = (response: any, errors: readonly GraphQLError[]) => {
+  if (!errors?.length) return;
   errors.forEach((error, index) => {
-    response.data = JSON.parse(error.message);
     if (checkError(error, 'UserInputError')) {
       response.http.status = 400;
+      response.data = JSON.parse(error.message);
     } else if (checkError(error, 'AuthenticationError')) {
       response.http.status = 401;
+      response.data = JSON.parse(error.message);
     } else if (checkError(error, 'ForbiddenError')) {
       response.http.status = 403;
+      response.data = JSON.parse(error.message);
     } else {
       response.http.status = 500;
     }
